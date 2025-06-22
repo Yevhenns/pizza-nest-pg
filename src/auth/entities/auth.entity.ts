@@ -20,8 +20,8 @@ export class User {
   @Column({ type: 'varchar', length: 100 })
   name: string;
 
-  @ApiProperty({ description: 'User email', required: true, uniqueItems: true })
-  @Column({ type: 'varchar', length: 100 })
+  @ApiProperty({ description: 'User email', required: true })
+  @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
 
   @ApiProperty({ description: 'User password', required: true })

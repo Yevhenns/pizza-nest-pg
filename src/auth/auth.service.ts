@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { RegisterDto } from './dto/create-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/auth.entity';
@@ -25,6 +30,13 @@ export class AuthService {
       if (!role) {
         this.logger.warn(`Role with id ${registerDto.roleId} not found`);
         throw new NotFoundException('Role not found');
+      }
+
+      const existingUser = await this.userRepository.findOneBy({
+        email: registerDto.email,
+      });
+      if (existingUser) {
+        throw new ConflictException('Email already in use');
       }
 
       const hashPassword = await bcrypt.hash(registerDto.password, 10);
