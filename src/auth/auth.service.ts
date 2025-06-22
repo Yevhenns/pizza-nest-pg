@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from 'src/roles/interfaces/role.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -19,11 +20,12 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    private jwtService: JwtService,
   ) {}
 
   private readonly logger = new Logger(AuthService.name);
 
-  async register(registerDto: RegisterDto): Promise<User> {
+  async register(registerDto: RegisterDto) {
     try {
       const userRole = await this.roleRepository.findOneBy({
         name: UserRole.USER,
@@ -47,7 +49,15 @@ export class AuthService {
         password: hashPassword,
         role: userRole,
       });
-      return await this.userRepository.save(newUser);
+      const createdUser = await this.userRepository.save(newUser);
+
+      const payload = { id: createdUser.id, name: createdUser.role.name };
+
+      const verifyToken = await this.jwtService.signAsync(payload);
+
+      console.log(verifyToken);
+
+      return createdUser;
     } catch (error) {
       this.logger.error('Error during registration', error);
       throw error;
