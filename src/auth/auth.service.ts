@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/auth.entity';
 import { Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
 
   private readonly logger = new Logger(AuthService.name);
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<User> {
     try {
       const role = await this.roleRepository.findOneBy({
         id: registerDto.roleId,
@@ -26,7 +27,13 @@ export class AuthService {
         throw new NotFoundException('Role not found');
       }
 
-      const newUser = this.userRepository.create({ ...registerDto, role });
+      const hashPassword = await bcrypt.hash(registerDto.password, 10);
+
+      const newUser = this.userRepository.create({
+        ...registerDto,
+        password: hashPassword,
+        role,
+      });
       return await this.userRepository.save(newUser);
     } catch (error) {
       this.logger.error('Error during registration', error);
