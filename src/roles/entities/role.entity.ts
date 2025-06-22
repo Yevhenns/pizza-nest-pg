@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserRole } from '../interfaces/role.interface';
 
 @Entity('roles')
@@ -20,4 +26,12 @@ export class Role {
   @ApiProperty({ description: 'Description of the user role', required: true })
   @Column({ type: 'varchar', length: 100 })
   description: string;
+
+  @ApiProperty({ description: 'Creation date', readOnly: true })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @ApiProperty({ description: 'Last update date', readOnly: true })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }
