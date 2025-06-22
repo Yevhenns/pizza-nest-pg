@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
   IsEmail,
@@ -57,13 +57,8 @@ export class RegisterDto {
   @IsOptional()
   avatar?: string;
 
+  @ApiHideProperty()
   @IsNumber()
-  @ApiProperty({
-    description: 'Category ID',
-    example: 1,
-    required: true,
-    nullable: false,
-  })
   @IsNotEmpty()
   @Transform(({ value }: { value: string }) =>
     value ? parseInt(value) : undefined,

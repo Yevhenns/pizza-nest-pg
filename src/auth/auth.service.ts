@@ -10,6 +10,7 @@ import { User } from './entities/auth.entity';
 import { Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
+import { UserRole } from 'src/roles/interfaces/role.interface';
 
 @Injectable()
 export class AuthService {
@@ -24,10 +25,10 @@ export class AuthService {
 
   async register(registerDto: RegisterDto): Promise<User> {
     try {
-      const role = await this.roleRepository.findOneBy({
-        id: registerDto.roleId,
+      const userRole = await this.roleRepository.findOneBy({
+        name: UserRole.USER,
       });
-      if (!role) {
+      if (!userRole) {
         this.logger.warn(`Role with id ${registerDto.roleId} not found`);
         throw new NotFoundException('Role not found');
       }
@@ -44,7 +45,7 @@ export class AuthService {
       const newUser = this.userRepository.create({
         ...registerDto,
         password: hashPassword,
-        role,
+        role: userRole,
       });
       return await this.userRepository.save(newUser);
     } catch (error) {
