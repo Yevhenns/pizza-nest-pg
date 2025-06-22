@@ -3,10 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from '../interfaces/role.interface';
+import { User } from 'src/auth/entities/auth.entity';
 
 @Entity('roles')
 export class Role {
@@ -28,10 +30,27 @@ export class Role {
   description: string;
 
   @ApiProperty({ description: 'Creation date', readOnly: true })
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
   @ApiProperty({ description: 'Last update date', readOnly: true })
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
+
+  @ApiProperty({
+    description: 'User relation',
+    type: () => [User],
+    required: true,
+    nullable: false,
+  })
+  @OneToMany(() => User, (user) => user.role)
+  users: User[];
 }

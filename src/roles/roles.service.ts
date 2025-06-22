@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 export class RolesService {
   constructor(
     @InjectRepository(Role)
-    private roleRepository: Repository<Role>,
+    private readonly roleRepository: Repository<Role>,
   ) {}
 
   private readonly logger = new Logger(RolesService.name);
@@ -26,7 +26,9 @@ export class RolesService {
 
   async findAll(): Promise<Role[]> {
     try {
-      const roles = await this.roleRepository.find();
+      const roles = await this.roleRepository.find({
+        relations: ['users'],
+      });
       return roles;
     } catch (error) {
       this.logger.error('Error fetching roles', error);
@@ -36,7 +38,10 @@ export class RolesService {
 
   async findOne(id: number): Promise<Role> {
     try {
-      const role = await this.roleRepository.findOneBy({ id });
+      const role = await this.roleRepository.findOne({
+        where: { id },
+        relations: ['users'],
+      });
       if (!role) {
         this.logger.warn(`Role with id ${id} not found`);
         throw new NotFoundException(`Role with id ${id} not found`);
