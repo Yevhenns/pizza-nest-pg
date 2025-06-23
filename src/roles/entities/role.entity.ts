@@ -1,14 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRole } from '../interfaces/role.interface';
-import { User } from 'src/auth/entities/auth.entity';
+import { User } from '../../auth/entities/auth.entity';
 
 @Entity('roles')
 export class Role {
@@ -24,26 +17,6 @@ export class Role {
     unique: true,
   })
   name: string;
-
-  @ApiProperty({ description: 'Description of the user role', required: true })
-  @Column({ type: 'varchar', length: 100 })
-  description: string;
-
-  @ApiProperty({ description: 'Creation date', readOnly: true })
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  @ApiProperty({ description: 'Last update date', readOnly: true })
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
 
   @ApiProperty({
     description: 'User relation',
