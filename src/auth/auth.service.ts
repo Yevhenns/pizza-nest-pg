@@ -12,16 +12,12 @@ import { Role } from 'src/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from 'src/roles/interfaces/role.interface';
 import { JwtService } from '@nestjs/jwt';
-import * as nodemailer from 'nodemailer';
-import { Transporter } from 'nodemailer';
+
+import { EmailService } from './email/email.service';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
-  private transporter: Transporter;
-  private baseUrl = `http://localhost:${process.env.PORT || 3000}`;
-  private email = process.env.EMAIL;
-  private password = process.env.PASSWORD;
 
   constructor(
     @InjectRepository(User)
@@ -29,37 +25,8 @@ export class AuthService {
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
     private jwtService: JwtService,
-  ) {
-    if (!this.email || !this.password) {
-      throw new Error(
-        'EMAIL or PASSWORD is not defined in environment variables',
-      );
-    }
-
-    this.transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: this.email,
-        pass: this.password,
-      },
-    });
-  }
-
-  async sendVerifyEmail(userEmail: string, token: string) {
-    const mailOptions = {
-      from: this.email,
-      to: userEmail,
-      subject: 'Email Confirmation',
-      html: `<p>To confirm your email, please <a href="${this.baseUrl}/verify/${token}">click here</a>.</p>`,
-    };
-
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      this.logger.error('Failed to send verification email', error);
-      throw new Error('Email sending failed');
-    }
-  }
+    private readonly emailService: EmailService,
+  ) {}
 
   async register(registerDto: RegisterDto): Promise<{
     message: string;
@@ -86,14 +53,17 @@ export class AuthService {
           `User with email ${registerDto.email} already exists but is not verified`,
         );
         const verifyToken = await this.jwtService.signAsync({
-          id: existingUser.id,
-          name: existingUser.role.name,
+          userId: existingUser.id,
+          role: existingUser.role.name,
         });
 
         existingUser.verificationToken = verifyToken;
         await this.userRepository.save(existingUser);
 
-        await this.sendVerifyEmail(existingUser.email, verifyToken);
+        await this.emailService.sendVerifyEmail(
+          existingUser.email,
+          verifyToken,
+        );
 
         return {
           message:
@@ -111,14 +81,14 @@ export class AuthService {
       const createdUser = await this.userRepository.save(newUser);
 
       const verifyToken = await this.jwtService.signAsync({
-        id: createdUser.id,
-        name: createdUser.role.name,
+        userId: createdUser.id,
+        role: createdUser.role.name,
       });
 
       createdUser.verificationToken = verifyToken;
       await this.userRepository.save(createdUser);
 
-      await this.sendVerifyEmail(createdUser.email, verifyToken);
+      await this.emailService.sendVerifyEmail(createdUser.email, verifyToken);
 
       return {
         message: 'User registered successfully. Verification email sent.',
