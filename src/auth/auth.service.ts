@@ -12,18 +12,55 @@ import { Role } from 'src/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from 'src/roles/interfaces/role.interface';
 import { JwtService } from '@nestjs/jwt';
+import * as nodemailer from 'nodemailer';
+import { Transporter } from 'nodemailer';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+  private transporter: Transporter;
+  private baseUrl = `http://localhost:${process.env.PORT || 3000}`;
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
     private jwtService: JwtService,
-  ) {}
+  ) {
+    const email = process.env.EMAIL;
+    const password = process.env.PASSWORD;
 
-  private readonly logger = new Logger(AuthService.name);
+    if (!email || !password) {
+      throw new Error(
+        'EMAIL or PASSWORD is not defined in environment variables',
+      );
+    }
+
+    this.transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: email,
+        pass: password,
+      },
+    });
+  }
+
+  async sendVerifyEmail(email: string, token: string, baseUrl: string) {
+    const mailOptions = {
+      from: email,
+      to: email,
+      subject: 'Email Confirmation',
+      html: `<p>To confirm your email, please <a href="${baseUrl}/verify/${token}">click here</a>.</p>`,
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      this.logger.log(`Email sent: ${info.response}`);
+    } catch (error) {
+      this.logger.error('Failed to send verification email', error);
+      throw new Error('Email sending failed');
+    }
+  }
 
   async register(registerDto: RegisterDto): Promise<{
     message: string;
@@ -57,6 +94,12 @@ export class AuthService {
         existingUser.verificationToken = verifyToken;
         await this.userRepository.save(existingUser);
 
+        await this.sendVerifyEmail(
+          existingUser.email,
+          verifyToken,
+          this.baseUrl,
+        );
+
         return {
           message:
             'Account exists but not verified. Verification email resent.',
@@ -80,7 +123,11 @@ export class AuthService {
       createdUser.verificationToken = verifyToken;
       await this.userRepository.save(createdUser);
 
-      return { message: 'User registered successfully' };
+      await this.sendVerifyEmail(createdUser.email, verifyToken, this.baseUrl);
+
+      return {
+        message: 'User registered successfully. Verification email sent.',
+      };
     } catch (error) {
       this.logger.error('Error during registration', error);
       throw error;
