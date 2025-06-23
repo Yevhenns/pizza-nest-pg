@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { RegisterService } from './services/register/register.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/auth.entity';
 import { Role } from 'src/roles/entities/role.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { EmailService } from './email/email.service';
+import { EmailService } from './services/email/email.service';
 
 @Module({
   imports: [
@@ -18,6 +18,6 @@ import { EmailService } from './email/email.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, EmailService],
+  providers: [RegisterService, EmailService],
 })
 export class AuthModule {}
