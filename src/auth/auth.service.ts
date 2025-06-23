@@ -37,11 +37,30 @@ export class AuthService {
         throw new NotFoundException('Role not found');
       }
 
-      const existingUser = await this.userRepository.findOneBy({
-        email: registerDto.email,
+      const existingUser = await this.userRepository.findOne({
+        where: { email: registerDto.email },
+        relations: ['role'],
       });
-      if (existingUser) {
+      if (existingUser && existingUser.verified) {
         throw new ConflictException('Email already in use');
+      }
+
+      if (existingUser && !existingUser.verified) {
+        this.logger.warn(
+          `User with email ${registerDto.email} already exists but is not verified`,
+        );
+        const verifyToken = await this.jwtService.signAsync({
+          id: existingUser.id,
+          name: existingUser.role.name,
+        });
+
+        existingUser.verificationToken = verifyToken;
+        await this.userRepository.save(existingUser);
+
+        return {
+          message:
+            'Account exists but not verified. Verification email resent.',
+        };
       }
 
       const hashPassword = await bcrypt.hash(registerDto.password, 10);
@@ -53,11 +72,13 @@ export class AuthService {
       });
       const createdUser = await this.userRepository.save(newUser);
 
-      const payload = { id: createdUser.id, name: createdUser.role.name };
+      const verifyToken = await this.jwtService.signAsync({
+        id: createdUser.id,
+        name: createdUser.role.name,
+      });
 
-      const verifyToken = await this.jwtService.signAsync(payload);
-
-      console.log(verifyToken);
+      createdUser.verificationToken = verifyToken;
+      await this.userRepository.save(createdUser);
 
       return { message: 'User registered successfully' };
     } catch (error) {
