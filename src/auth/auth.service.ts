@@ -25,7 +25,9 @@ export class AuthService {
 
   private readonly logger = new Logger(AuthService.name);
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<{
+    message: string;
+  }> {
     try {
       const userRole = await this.roleRepository.findOneBy({
         name: UserRole.USER,
@@ -57,7 +59,7 @@ export class AuthService {
 
       console.log(verifyToken);
 
-      return createdUser;
+      return { message: 'User registered successfully' };
     } catch (error) {
       this.logger.error('Error during registration', error);
       throw error;
