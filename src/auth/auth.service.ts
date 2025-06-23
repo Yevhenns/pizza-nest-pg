@@ -20,6 +20,9 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   private transporter: Transporter;
   private baseUrl = `http://localhost:${process.env.PORT || 3000}`;
+  private email = process.env.EMAIL;
+  private password = process.env.PASSWORD;
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -27,10 +30,7 @@ export class AuthService {
     private readonly roleRepository: Repository<Role>,
     private jwtService: JwtService,
   ) {
-    const email = process.env.EMAIL;
-    const password = process.env.PASSWORD;
-
-    if (!email || !password) {
+    if (!this.email || !this.password) {
       throw new Error(
         'EMAIL or PASSWORD is not defined in environment variables',
       );
@@ -39,23 +39,22 @@ export class AuthService {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: email,
-        pass: password,
+        user: this.email,
+        pass: this.password,
       },
     });
   }
 
-  async sendVerifyEmail(email: string, token: string, baseUrl: string) {
+  async sendVerifyEmail(userEmail: string, token: string) {
     const mailOptions = {
-      from: email,
-      to: email,
+      from: this.email,
+      to: userEmail,
       subject: 'Email Confirmation',
-      html: `<p>To confirm your email, please <a href="${baseUrl}/verify/${token}">click here</a>.</p>`,
+      html: `<p>To confirm your email, please <a href="${this.baseUrl}/verify/${token}">click here</a>.</p>`,
     };
 
     try {
-      const info = await this.transporter.sendMail(mailOptions);
-      this.logger.log(`Email sent: ${info.response}`);
+      await this.transporter.sendMail(mailOptions);
     } catch (error) {
       this.logger.error('Failed to send verification email', error);
       throw new Error('Email sending failed');
@@ -94,11 +93,7 @@ export class AuthService {
         existingUser.verificationToken = verifyToken;
         await this.userRepository.save(existingUser);
 
-        await this.sendVerifyEmail(
-          existingUser.email,
-          verifyToken,
-          this.baseUrl,
-        );
+        await this.sendVerifyEmail(existingUser.email, verifyToken);
 
         return {
           message:
@@ -123,7 +118,7 @@ export class AuthService {
       createdUser.verificationToken = verifyToken;
       await this.userRepository.save(createdUser);
 
-      await this.sendVerifyEmail(createdUser.email, verifyToken, this.baseUrl);
+      await this.sendVerifyEmail(createdUser.email, verifyToken);
 
       return {
         message: 'User registered successfully. Verification email sent.',
