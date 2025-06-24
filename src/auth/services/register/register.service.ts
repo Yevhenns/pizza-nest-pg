@@ -1,6 +1,8 @@
 import {
   ConflictException,
+  HttpException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -44,31 +46,13 @@ export class RegisterService {
         where: { email: registerDto.email },
         relations: ['role'],
       });
+
       if (existingUser && existingUser.verified) {
         throw new ConflictException('Email already in use');
       }
 
       if (existingUser && !existingUser.verified) {
-        this.logger.warn(
-          `User with email ${registerDto.email} already exists but is not verified`,
-        );
-        const verifyToken = await this.jwtService.signAsync({
-          userId: existingUser.id,
-          role: existingUser.role.name,
-        });
-
-        existingUser.verificationToken = verifyToken;
-        await this.userRepository.save(existingUser);
-
-        await this.emailService.sendVerifyEmail(
-          existingUser.email,
-          verifyToken,
-        );
-
-        return {
-          message:
-            'Account exists but not verified. Verification email resent.',
-        };
+        throw new ConflictException('Email already in use but is not verified');
       }
 
       const hashPassword = await bcrypt.hash(registerDto.password, 10);
@@ -82,7 +66,7 @@ export class RegisterService {
 
       const verifyToken = await this.jwtService.signAsync({
         userId: createdUser.id,
-        role: createdUser.role.name,
+        email: createdUser.email,
       });
 
       createdUser.verificationToken = verifyToken;
@@ -95,7 +79,12 @@ export class RegisterService {
       };
     } catch (error) {
       this.logger.error('Error during registration', error);
-      throw error;
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Registration failed');
     }
   }
 }

@@ -31,7 +31,7 @@ export class EmailService {
       from: this.email,
       to: userEmail,
       subject: 'Email Confirmation',
-      html: `<p>To confirm your email, please <a href="${this.baseUrl}/verify/${token}">click here</a>.</p>`,
+      html: `<p>To confirm your email, please <a href="${this.baseUrl}/api/verify/${token}">click here</a>.</p>`,
     };
 
     try {
