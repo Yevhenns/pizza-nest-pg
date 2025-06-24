@@ -6,7 +6,7 @@ import { User } from './entities/auth.entity';
 import { Role } from 'src/roles/entities/role.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailService } from './services/email/email.service';
-import { VerifyService } from './verify/verify.service';
+import { VerifyService } from './services/verify/verify.service';
 import { VerificationTokenService } from './services/verification-token/verification-token.service';
 import { LoginService } from './services/login/login.service';
 

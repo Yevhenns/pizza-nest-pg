@@ -2,7 +2,7 @@ import { Controller, Post, Body, Param, Get } from '@nestjs/common';
 import { RegisterService } from './services/register/register.service';
 import { RegisterDto } from './dto/create-auth.dto';
 import { VerificationTokenService } from './services/verification-token/verification-token.service';
-import { VerifyService } from './verify/verify.service';
+import { VerifyService } from './services/verify/verify.service';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoginService } from './services/login/login.service';
