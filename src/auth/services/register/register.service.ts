@@ -48,10 +48,12 @@ export class RegisterService {
       });
 
       if (existingUser && existingUser.verified) {
+        this.logger.warn(`Email already in use`);
         throw new ConflictException('Email already in use');
       }
 
       if (existingUser && !existingUser.verified) {
+        this.logger.warn(`Email already in use but is not verified`);
         throw new ConflictException('Email already in use but is not verified');
       }
 
