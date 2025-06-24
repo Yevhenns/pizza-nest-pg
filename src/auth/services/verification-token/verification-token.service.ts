@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { User } from '../../entities/auth.entity';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
+import { ResendVerificationDto } from 'src/auth/dto/resend-verification.dto';
 
 @Injectable()
 export class VerificationTokenService {
@@ -23,22 +24,28 @@ export class VerificationTokenService {
     private readonly emailService: EmailService,
   ) {}
 
-  async resendEmailVerification(email: string): Promise<{
+  async resendEmailVerification(
+    resendVerificationDto: ResendVerificationDto,
+  ): Promise<{
     message: string;
   }> {
     try {
       const existingUser = await this.userRepository.findOne({
-        where: { email },
+        where: { email: resendVerificationDto.email },
         relations: ['role'],
       });
 
       if (!existingUser) {
-        this.logger.warn(`User with email ${email} not found`);
+        this.logger.warn(
+          `User with email ${resendVerificationDto.email} not found`,
+        );
         throw new NotFoundException('User not found');
       }
 
       if (existingUser.verified) {
-        this.logger.warn(`User with email ${email} is already verified`);
+        this.logger.warn(
+          `User with email ${resendVerificationDto.email} is already verified`,
+        );
         throw new ConflictException('Email already in use');
       }
 

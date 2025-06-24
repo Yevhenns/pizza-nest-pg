@@ -3,6 +3,7 @@ import { RegisterService } from './services/register/register.service';
 import { RegisterDto } from './dto/create-auth.dto';
 import { VerificationTokenService } from './services/verification-token/verification-token.service';
 import { VerifyService } from './verify/verify.service';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
 
 @Controller()
 export class AuthController {
@@ -18,8 +19,12 @@ export class AuthController {
   }
 
   @Post('resend-verification')
-  resendEmailVerification(@Body('email') email: string) {
-    return this.verificationTokenService.resendEmailVerification(email);
+  resendEmailVerification(
+    @Body() resendVerificationDto: ResendVerificationDto,
+  ) {
+    return this.verificationTokenService.resendEmailVerification(
+      resendVerificationDto,
+    );
   }
 
   @Get('verify/:token')
