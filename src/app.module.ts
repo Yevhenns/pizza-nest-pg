@@ -10,6 +10,7 @@ import { CategoriesModule } from './catalog/categories/categories.module';
 
 import { ProductsModule } from './catalog/products/products.module';
 import { SupplementsModule } from './catalog/supplements/supplements.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SupplementsModule } from './catalog/supplements/supplements.module';
     CategoriesModule,
     ProductsModule,
     SupplementsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
