@@ -6,10 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { ormConfig } from './config/orm-config';
-import { CategoriesModule } from './categories/categories.module';
+import { CategoriesModule } from './catalog/categories/categories.module';
 
-import { ProductsModule } from './products/products.module';
-import { SupplementsModule } from './supplements/supplements.module';
+import { ProductsModule } from './catalog/products/products.module';
+import { SupplementsModule } from './catalog/supplements/supplements.module';
 
 @Module({
   imports: [
