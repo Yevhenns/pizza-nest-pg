@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRole } from '../interfaces/role.interface';
 import { User } from '../../auth/entities/auth.entity';
 
-@Entity('roles')
+@Entity('role')
 export class Role {
   @ApiProperty({ description: 'Unique identifier of the user role' })
   @PrimaryGeneratedColumn()

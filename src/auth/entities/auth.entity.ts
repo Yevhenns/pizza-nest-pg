@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('users')
+@Entity('user')
 export class User {
   @ApiProperty({ description: 'Unique identifier of the user' })
   @PrimaryGeneratedColumn()
