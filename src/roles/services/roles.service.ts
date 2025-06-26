@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from './entities/role.entity';
+import { Role } from '../entities/role.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -14,9 +14,7 @@ export class RolesService {
 
   async findAll(): Promise<Role[]> {
     try {
-      const roles = await this.roleRepository.find({
-        relations: ['users'],
-      });
+      const roles = await this.roleRepository.find();
       return roles;
     } catch (error) {
       this.logger.error('Error fetching roles', error);
@@ -28,7 +26,6 @@ export class RolesService {
     try {
       const role = await this.roleRepository.findOne({
         where: { id },
-        relations: ['users'],
       });
       if (!role) {
         this.logger.warn(`Role with id ${id} not found`);

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { RegisterService } from './services/register/register.service';
-import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/auth.entity';
 import { Role } from 'src/roles/entities/role.entity';
@@ -9,6 +8,8 @@ import { EmailService } from './services/email/email.service';
 import { VerifyService } from './services/verify/verify.service';
 import { VerificationTokenService } from './services/verification-token/verification-token.service';
 import { LoginService } from './services/login/login.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { AuthController } from './controllers/auth.controller';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { LoginService } from './services/login/login.service';
   ],
   controllers: [AuthController],
   providers: [
+    JwtStrategy,
     RegisterService,
     EmailService,
     VerifyService,

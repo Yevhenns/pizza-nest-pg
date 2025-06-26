@@ -51,6 +51,7 @@ export class LoginService {
 
       const token = await this.jwtService.signAsync({
         userId: existingUser.id,
+        email: existingUser.email,
         role: existingUser.role.name,
       });
 
