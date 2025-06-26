@@ -11,6 +11,7 @@ import { CategoriesModule } from './catalog/categories/categories.module';
 import { ProductsModule } from './catalog/products/products.module';
 import { SupplementsModule } from './catalog/supplements/supplements.module';
 import { AdminModule } from './admin/admin.module';
+import { OrderMailModule } from './order-mail/order-mail.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AdminModule } from './admin/admin.module';
     ProductsModule,
     SupplementsModule,
     AdminModule,
+    OrderMailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
