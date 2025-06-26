@@ -7,12 +7,12 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CategoriesService } from '../services/categories.service';
 
 @Controller('admin/categories')
 export class CategoriesController {
