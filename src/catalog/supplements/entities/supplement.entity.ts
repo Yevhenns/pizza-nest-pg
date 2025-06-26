@@ -27,7 +27,6 @@ export class Supplement {
   @ApiProperty({ description: 'Price of the supplement', required: true })
   @Column({
     type: 'decimal',
-    unique: true,
     nullable: false,
   })
   price: number;

@@ -10,20 +10,35 @@ import { UpdateSupplementDto } from '../dto/update-supplement.dto';
 import { Supplement } from '../../../catalog/supplements/entities/supplement.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Category } from 'src/catalog/categories/entities/category.entity';
 
 @Injectable()
 export class SupplementsService {
   constructor(
     @InjectRepository(Supplement)
     private readonly supplementRepository: Repository<Supplement>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
   ) {}
 
   private readonly logger = new Logger(SupplementsService.name);
 
   async create(createSupplementDto: CreateSupplementDto) {
     try {
-      const newSupplement =
-        this.supplementRepository.create(createSupplementDto);
+      const category = await this.categoryRepository.findOneBy({
+        id: createSupplementDto.categoryId,
+      });
+
+      if (!category) {
+        this.logger.error('Category not found');
+        throw new NotFoundException('Category not found');
+      }
+
+      const newSupplement = this.supplementRepository.create({
+        ...createSupplementDto,
+        category,
+      });
+
       const createdSupplement =
         await this.supplementRepository.save(newSupplement);
 
@@ -41,6 +56,15 @@ export class SupplementsService {
 
   async update(id: number, updateSupplementDto: UpdateSupplementDto) {
     try {
+      const category = await this.categoryRepository.findOneBy({
+        id: updateSupplementDto.categoryId,
+      });
+
+      if (!category) {
+        this.logger.error('Category not found');
+        throw new NotFoundException('Category not found');
+      }
+
       const supplement = await this.supplementRepository.findOneBy({ id });
 
       if (!supplement) {
@@ -48,10 +72,10 @@ export class SupplementsService {
         throw new NotFoundException('Supplement not found');
       }
 
-      const updated = this.supplementRepository.merge(
-        supplement,
-        updateSupplementDto,
-      );
+      const updated = this.supplementRepository.merge(supplement, {
+        ...updateSupplementDto,
+        category,
+      });
 
       return await this.supplementRepository.save(updated);
     } catch (error) {

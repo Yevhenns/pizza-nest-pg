@@ -10,19 +10,35 @@ import { UpdateProductDto } from '../dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from 'src/catalog/products/entities/product.entity';
+import { Category } from 'src/catalog/categories/entities/category.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
   ) {}
 
   private readonly logger = new Logger(ProductsService.name);
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     try {
-      const newProduct = this.productRepository.create(createProductDto);
+      const category = await this.categoryRepository.findOneBy({
+        id: createProductDto.categoryId,
+      });
+
+      if (!category) {
+        this.logger.error('Category not found');
+        throw new NotFoundException('Category not found');
+      }
+
+      const newProduct = this.productRepository.create({
+        ...createProductDto,
+        category,
+      });
+
       const createdProduct = await this.productRepository.save(newProduct);
 
       return createdProduct;
@@ -39,6 +55,15 @@ export class ProductsService {
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
+      const category = await this.categoryRepository.findOneBy({
+        id: updateProductDto.categoryId,
+      });
+
+      if (!category) {
+        this.logger.error('Category not found');
+        throw new NotFoundException('Category not found');
+      }
+
       const product = await this.productRepository.findOneBy({ id });
 
       if (!product) {
@@ -46,7 +71,10 @@ export class ProductsService {
         throw new NotFoundException('Product not found');
       }
 
-      const updated = this.productRepository.merge(product, updateProductDto);
+      const updated = this.productRepository.merge(product, {
+        ...updateProductDto,
+        category,
+      });
 
       return await this.productRepository.save(updated);
     } catch (error) {
