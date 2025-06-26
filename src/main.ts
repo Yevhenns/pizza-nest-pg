@@ -12,6 +12,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Nostra pizza API Documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .setDescription('Description')
     .addServer(`http://localhost:${PORT}/api`, 'Development server')
     .build();

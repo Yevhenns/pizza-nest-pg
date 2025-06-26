@@ -9,6 +9,7 @@ import { EmailService } from './services/email/email.service';
 import { VerifyService } from './services/verify/verify.service';
 import { VerificationTokenService } from './services/verification-token/verification-token.service';
 import { LoginService } from './services/login/login.service';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { LoginService } from './services/login/login.service';
   ],
   controllers: [AuthController],
   providers: [
+    JwtStrategy,
     RegisterService,
     EmailService,
     VerifyService,
