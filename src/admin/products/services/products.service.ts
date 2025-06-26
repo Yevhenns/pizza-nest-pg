@@ -27,7 +27,7 @@ export class ProductsService {
 
       return createdProduct;
     } catch (error) {
-      this.logger.error('Error during registration', error);
+      this.logger.error('Create product error', error);
 
       if (error instanceof HttpException) {
         throw error;
@@ -42,44 +42,44 @@ export class ProductsService {
       const product = await this.productRepository.findOneBy({ id });
 
       if (!product) {
-        this.logger.warn(`Role with id ${id} not found`);
-        throw new NotFoundException('Category not found');
+        this.logger.warn(`Product with id ${id} not found`);
+        throw new NotFoundException('Product not found');
       }
 
       const updated = this.productRepository.merge(product, updateProductDto);
 
       return await this.productRepository.save(updated);
     } catch (error) {
-      this.logger.error('Error during delete category', error);
+      this.logger.error('Error during update product', error);
 
       if (error instanceof HttpException) {
         throw error;
       }
 
-      throw new InternalServerErrorException('Delete category failed');
+      throw new InternalServerErrorException('Update product failed');
     }
   }
 
   async remove(id: number) {
     try {
-      const category = await this.productRepository.findOneBy({ id });
+      const product = await this.productRepository.findOneBy({ id });
 
-      if (!category) {
-        this.logger.warn(`Role with id ${id} not found`);
-        throw new NotFoundException('Category not found');
+      if (!product) {
+        this.logger.warn(`Product with id ${id} not found`);
+        throw new NotFoundException('Product not found');
       }
 
-      await this.productRepository.remove(category);
+      await this.productRepository.remove(product);
 
-      return { message: `Category with ID #${id} removed` };
+      return { message: `Product with ID #${id} removed` };
     } catch (error) {
-      this.logger.error('Error during delete category', error);
+      this.logger.error('Error during delete product', error);
 
       if (error instanceof HttpException) {
         throw error;
       }
 
-      throw new InternalServerErrorException('Delete category failed');
+      throw new InternalServerErrorException('Delete product failed');
     }
   }
 }

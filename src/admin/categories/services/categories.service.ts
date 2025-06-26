@@ -27,7 +27,7 @@ export class CategoriesService {
 
       return createdCategory;
     } catch (error) {
-      this.logger.error('Error during registration', error);
+      this.logger.error('Create category error', error);
 
       if (error instanceof HttpException) {
         throw error;
@@ -45,25 +45,24 @@ export class CategoriesService {
       const category = await this.categoriesRepository.findOneBy({ id });
 
       if (!category) {
-        this.logger.warn(`Role with id ${id} not found`);
+        this.logger.warn(`Category with id ${id} not found`);
         throw new NotFoundException('Category not found');
       }
 
-      const updateDto: UpdateCategoryDto = {
-        name: updateCategoryDto.name,
-      };
-
-      const updated = this.categoriesRepository.merge(category, updateDto);
+      const updated = this.categoriesRepository.merge(
+        category,
+        updateCategoryDto,
+      );
 
       return await this.categoriesRepository.save(updated);
     } catch (error) {
-      this.logger.error('Error during delete category', error);
+      this.logger.error('Error during update category', error);
 
       if (error instanceof HttpException) {
         throw error;
       }
 
-      throw new InternalServerErrorException('Delete category failed');
+      throw new InternalServerErrorException('Update category failed');
     }
   }
 
@@ -72,7 +71,7 @@ export class CategoriesService {
       const category = await this.categoriesRepository.findOneBy({ id });
 
       if (!category) {
-        this.logger.warn(`Role with id ${id} not found`);
+        this.logger.warn(`Category with id ${id} not found`);
         throw new NotFoundException('Category not found');
       }
 
