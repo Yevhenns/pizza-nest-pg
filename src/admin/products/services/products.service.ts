@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
-import { Product } from '../entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Product } from 'src/catalog/products/entities/product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -46,11 +46,7 @@ export class ProductsService {
         throw new NotFoundException('Category not found');
       }
 
-      const updateDto: UpdateProductDto = {
-        name: updateProductDto.name,
-      };
-
-      const updated = this.productRepository.merge(product, updateDto);
+      const updated = this.productRepository.merge(product, updateProductDto);
 
       return await this.productRepository.save(updated);
     } catch (error) {
