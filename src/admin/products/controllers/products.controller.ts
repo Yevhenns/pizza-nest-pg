@@ -7,12 +7,12 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { ProductsService } from '../services/products.service';
+import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
 
 @Controller('admin/products')
 export class ProductsController {
