@@ -1,4 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,15 +20,73 @@ export class CategoriesService {
 
   private readonly logger = new Logger(CategoriesService.name);
 
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    try {
+      const newCategory = this.categoriesRepository.create(createCategoryDto);
+      const createdCategory = await this.categoriesRepository.save(newCategory);
+
+      return createdCategory;
+    } catch (error) {
+      this.logger.error('Error during registration', error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Create category failed');
+    }
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(
+    id: number,
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<Category> {
+    try {
+      const category = await this.categoriesRepository.findOneBy({ id });
+
+      if (!category) {
+        this.logger.warn(`Role with id ${id} not found`);
+        throw new NotFoundException('Category not found');
+      }
+
+      const updateDto: UpdateCategoryDto = {
+        name: updateCategoryDto.name,
+      };
+
+      const updated = this.categoriesRepository.merge(category, updateDto);
+
+      return await this.categoriesRepository.save(updated);
+    } catch (error) {
+      this.logger.error('Error during delete category', error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Delete category failed');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    try {
+      const category = await this.categoriesRepository.findOneBy({ id });
+
+      if (!category) {
+        this.logger.warn(`Role with id ${id} not found`);
+        throw new NotFoundException('Category not found');
+      }
+
+      await this.categoriesRepository.remove(category);
+
+      return { message: `Category with ID #${id} removed` };
+    } catch (error) {
+      this.logger.error('Error during delete category', error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Delete category failed');
+    }
   }
 }
