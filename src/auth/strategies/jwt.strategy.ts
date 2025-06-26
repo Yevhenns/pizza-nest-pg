@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
-import { CustomJwtPayload } from './interfaces/auth.interface';
+import { CustomJwtPayload } from '../interfaces/auth.interface';
 dotenv.config();
 
 @Injectable()
