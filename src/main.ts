@@ -15,6 +15,7 @@ async function bootstrap() {
     .addBearerAuth()
     .setDescription('Description')
     .addServer(`http://localhost:${PORT}/api`, 'Development server')
+    .addServer('https://pizza-nest-pg.onrender.com/api', 'Production server')
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
