@@ -19,6 +19,18 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
+  @Get('promotions')
+  @ApiOperation({ summary: 'Get promotions products list' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns promotions products list',
+    type: Product,
+    isArray: true,
+  })
+  findPromotions() {
+    return this.productsService.findPromotions();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get product by ID' })
   @ApiResponse({
