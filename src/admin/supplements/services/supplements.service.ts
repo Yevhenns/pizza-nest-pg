@@ -23,7 +23,7 @@ export class SupplementsService {
 
   private readonly logger = new Logger(SupplementsService.name);
 
-  async create(createSupplementDto: CreateSupplementDto) {
+  async create(createSupplementDto: CreateSupplementDto): Promise<Supplement> {
     try {
       const category = await this.categoryRepository.findOneBy({
         id: createSupplementDto.categoryId,
@@ -54,7 +54,10 @@ export class SupplementsService {
     }
   }
 
-  async update(id: number, updateSupplementDto: UpdateSupplementDto) {
+  async update(
+    id: number,
+    updateSupplementDto: UpdateSupplementDto,
+  ): Promise<Supplement> {
     try {
       const category = await this.categoryRepository.findOneBy({
         id: updateSupplementDto.categoryId,
@@ -89,7 +92,9 @@ export class SupplementsService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<{
+    message: string;
+  }> {
     try {
       const supplement = await this.supplementRepository.findOneBy({ id });
 

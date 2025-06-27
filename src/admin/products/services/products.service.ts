@@ -53,7 +53,10 @@ export class ProductsService {
     }
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
     try {
       const category = await this.categoryRepository.findOneBy({
         id: updateProductDto.categoryId,
@@ -88,7 +91,9 @@ export class ProductsService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<{
+    message: string;
+  }> {
     try {
       const product = await this.productRepository.findOneBy({ id });
 
