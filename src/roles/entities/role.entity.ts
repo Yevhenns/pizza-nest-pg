@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRole } from '../interfaces/role.interface';
 import { User } from '../../auth/entities/auth.entity';
@@ -27,3 +27,5 @@ export class Role {
   @OneToMany(() => User, (user) => user.role)
   users: User[];
 }
+
+export class RoleWithoutUsersDto extends OmitType(Role, ['users'] as const) {}
