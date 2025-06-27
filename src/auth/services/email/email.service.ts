@@ -6,7 +6,7 @@ import { Transporter } from 'nodemailer';
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
   private transporter: Transporter;
-  private baseUrl = `http://localhost:${process.env.PORT || 3000}`;
+  private baseUrl = process.env.BASE_URL;
   private email = process.env.EMAIL;
   private password = process.env.PASSWORD;
 
