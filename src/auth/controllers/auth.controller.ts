@@ -6,6 +6,7 @@ import { VerificationTokenService } from '../services/verification-token/verific
 import { RegisterDto } from '../dto/create-auth.dto';
 import { LoginDto } from '../dto/login.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller()
 export class AuthController {
@@ -17,21 +18,47 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @ApiOperation({ summary: 'Register user by email' })
+  @ApiResponse({
+    status: 201,
+    description:
+      'Returns object {message: "User registered successfully. Verification email sent."}',
+    type: Object,
+  })
   create(@Body() registerDto: RegisterDto) {
     return this.registerService.register(registerDto);
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'Login user by email' })
+  @ApiResponse({
+    status: 201,
+    description: 'Returns token',
+    type: String,
+  })
   login(@Body() loginDto: LoginDto) {
     return this.loginService.login(loginDto);
   }
 
   @Get('verify/:token')
+  @ApiOperation({ summary: 'Verify user by email' })
+  @ApiResponse({
+    status: 200,
+    description: "Returns object { message: 'Email verified successfully' }",
+    type: Object,
+  })
   verifyEmail(@Param('token') token: string) {
     return this.verifyService.verifyEmail(token);
   }
 
   @Post('resend-verification')
+  @ApiOperation({ summary: 'Get new verify token' })
+  @ApiResponse({
+    status: 201,
+    description:
+      'Returns object {message: "Verification email has been resent."}',
+    type: Object,
+  })
   resendEmailVerification(
     @Body() resendVerificationDto: ResendVerificationDto,
   ) {

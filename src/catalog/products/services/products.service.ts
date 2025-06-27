@@ -24,6 +24,19 @@ export class ProductsService {
     }
   }
 
+  async findPromotions() {
+    try {
+      const products = await this.productRepository.find({
+        where: { promotion: true },
+        relations: ['category'],
+      });
+      return products;
+    } catch (error) {
+      this.logger.error('Error fetching promotion products', error);
+      throw error;
+    }
+  }
+
   async findOne(id: number) {
     try {
       const product = await this.productRepository.findOne({

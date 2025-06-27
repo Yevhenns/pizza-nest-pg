@@ -66,7 +66,9 @@ export class CategoriesService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<{
+    message: string;
+  }> {
     try {
       const category = await this.categoriesRepository.findOneBy({ id });
 

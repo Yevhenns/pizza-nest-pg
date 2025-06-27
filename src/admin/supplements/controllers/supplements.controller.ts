@@ -10,24 +10,37 @@ import {
 import { SupplementsService } from '../services/supplements.service';
 import { CreateSupplementDto } from '../dto/create-supplement.dto';
 import { UpdateSupplementDto } from '../dto/update-supplement.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { Supplement } from 'src/catalog/supplements/entities/supplement.entity';
 
 @Controller('admin/supplements')
 export class SupplementsController {
   constructor(private readonly supplementsService: SupplementsService) {}
 
+  @Post()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, AdminGuard)
-  @Post()
+  @ApiOperation({ summary: 'Create supplement' })
+  @ApiResponse({
+    status: 201,
+    description: 'Returns created supplement',
+    type: Supplement,
+  })
   create(@Body() createSupplementDto: CreateSupplementDto) {
     return this.supplementsService.create(createSupplementDto);
   }
 
+  @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, AdminGuard)
-  @Patch(':id')
+  @ApiOperation({ summary: 'Update supplement' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns updated supplement',
+    type: Supplement,
+  })
   update(
     @Param('id') id: string,
     @Body() updateSupplementDto: UpdateSupplementDto,
@@ -35,9 +48,15 @@ export class SupplementsController {
     return this.supplementsService.update(+id, updateSupplementDto);
   }
 
+  @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, AdminGuard)
-  @Delete(':id')
+  @ApiOperation({ summary: 'Delete supplement by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns object { message: "Supplement with ID # removed" }',
+    type: Object,
+  })
   remove(@Param('id') id: string) {
     return this.supplementsService.remove(+id);
   }
