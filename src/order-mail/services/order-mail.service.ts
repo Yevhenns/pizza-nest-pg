@@ -1,4 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { CreateOrderMailDto } from '../dto/create-order-mail.dto';
 import * as handlebars from 'handlebars';
 import { join } from 'path';
@@ -20,13 +24,15 @@ export class OrderMailService {
     }
   }
 
-  async create(createOrderMailDto: CreateOrderMailDto) {
+  async create(createOrderMailDto: CreateOrderMailDto): Promise<{
+    success: boolean;
+  }> {
     const email = process.env.EMAIL;
     const password = process.env.PASSWORD;
 
     if (!email || !password) {
       this.logger.error('Email or password environment variables are not set');
-      return;
+      throw new InternalServerErrorException('Email configuration is missing');
     }
 
     const templateSource = this.loadTemplate();
@@ -60,8 +66,11 @@ export class OrderMailService {
         subject: 'Order',
         html: htmlBody,
       });
+
+      return { success: true };
     } catch (error) {
       this.logger.error('Error sending email', error);
+      throw new InternalServerErrorException('Send order failed');
     }
   }
 }
