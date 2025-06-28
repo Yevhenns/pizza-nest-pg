@@ -14,9 +14,7 @@ export class CategoriesService {
 
   async findAll() {
     try {
-      const categories = await this.categoriesRepository.find({
-        relations: ['products', 'supplements'],
-      });
+      const categories = await this.categoriesRepository.find({});
       return categories;
     } catch (error) {
       this.logger.error('Error fetching categories', error);
@@ -28,7 +26,6 @@ export class CategoriesService {
     try {
       const category = await this.categoriesRepository.findOne({
         where: { id },
-        relations: ['products', 'supplements'],
       });
       if (!category) {
         this.logger.warn(`Category with id ${id} not found`);
