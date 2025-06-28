@@ -28,11 +28,9 @@ export class CategoriesService {
       return createdCategory;
     } catch (error) {
       this.logger.error('Create category error', error);
-
       if (error instanceof HttpException) {
         throw error;
       }
-
       throw new InternalServerErrorException('Create category failed');
     }
   }
@@ -57,11 +55,9 @@ export class CategoriesService {
       return await this.categoriesRepository.save(updated);
     } catch (error) {
       this.logger.error('Error during update category', error);
-
       if (error instanceof HttpException) {
         throw error;
       }
-
       throw new InternalServerErrorException('Update category failed');
     }
   }
@@ -82,11 +78,9 @@ export class CategoriesService {
       return { message: `Category with ID #${id} removed` };
     } catch (error) {
       this.logger.error('Error during delete category', error);
-
       if (error instanceof HttpException) {
         throw error;
       }
-
       throw new InternalServerErrorException('Delete category failed');
     }
   }

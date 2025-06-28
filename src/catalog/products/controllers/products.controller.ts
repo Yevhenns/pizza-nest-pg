@@ -1,22 +1,22 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
 import { Product } from '../entities/product.entity';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get products list' })
+  @ApiOperation({ summary: 'Get products list or filter by category' })
   @ApiResponse({
     status: 200,
     description: 'Returns products list',
-    type: Product,
-    isArray: true,
+    type: [Product],
   })
-  findAll() {
-    return this.productsService.findAll();
+  @ApiQuery({ name: 'categoryId', required: false, type: Number })
+  findAll(@Query('categoryId') categoryId?: string) {
+    return this.productsService.findAll(categoryId ? +categoryId : undefined);
   }
 
   @Get('promotions')

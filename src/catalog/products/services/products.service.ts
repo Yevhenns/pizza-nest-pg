@@ -1,4 +1,10 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { Product } from '../entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,9 +18,11 @@ export class ProductsService {
 
   private readonly logger = new Logger(ProductsService.name);
 
-  async findAll() {
+  async findAll(categoryId?: number) {
+    const where = categoryId ? { category: { id: categoryId } } : undefined;
     try {
       const products = await this.productRepository.find({
+        where,
         relations: ['category'],
       });
       return products;
@@ -50,7 +58,10 @@ export class ProductsService {
       return product;
     } catch (error) {
       this.logger.error(`Error fetching product with id ${id}`, error);
-      throw error;
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Find one product failed');
     }
   }
 }
