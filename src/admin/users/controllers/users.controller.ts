@@ -6,7 +6,7 @@ import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { User } from 'src/auth/entities/auth.entity';
 import { UpdateUserRoleDto } from '../dto/update-user.dto';
 
-@Controller('users')
+@Controller('admin/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
