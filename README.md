@@ -10,6 +10,20 @@ You can find the database schema [here](https://dbdiagram.io/d/Nostra-pizza-6857
 $ npm install
 ```
 
+## Environment variables
+
+Copy .env.example to .env and fill in the required values:
+
+```bash
+$ cp .env.example .env
+```
+
+## Run seed
+
+```bash
+$ npm run seed
+```
+
 ## Compile and run the project
 
 ```bash
