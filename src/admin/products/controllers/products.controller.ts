@@ -28,8 +28,8 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  // @ApiBearerAuth()
-  // @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({
     status: 201,
