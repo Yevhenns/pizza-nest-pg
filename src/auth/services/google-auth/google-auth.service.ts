@@ -1,10 +1,10 @@
 import {
-  HttpException,
-  HttpStatus,
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,7 +29,7 @@ export class GoogleAuthService {
 
   async googleAuth(googleAuthDto: GoogleAuthDto) {
     if (!googleAuthDto) {
-      throw new HttpException('Missing token', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Missing token');
     }
 
     const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -51,10 +51,8 @@ export class GoogleAuthService {
       const payload = ticket.getPayload();
 
       if (!payload) {
-        throw new HttpException(
-          'Invalid Google token',
-          HttpStatus.UNAUTHORIZED,
-        );
+        this.logger.warn('Invalid Google token');
+        throw new UnauthorizedException('Invalid Google token');
       }
 
       let user = await this.userRepository.findOne({
@@ -68,7 +66,7 @@ export class GoogleAuthService {
         });
 
         if (!userRole) {
-          this.logger.warn(`Role not found`);
+          this.logger.warn('Role not found');
           throw new NotFoundException('Role not found');
         }
 
