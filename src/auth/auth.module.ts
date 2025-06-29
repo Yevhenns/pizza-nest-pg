@@ -10,6 +10,7 @@ import { VerificationTokenService } from './services/verification-token/verifica
 import { LoginService } from './services/login/login.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './controllers/auth.controller';
+import { GoogleAuthService } from './services/google-auth/google-auth.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthController } from './controllers/auth.controller';
     VerifyService,
     VerificationTokenService,
     LoginService,
+    GoogleAuthService,
   ],
 })
 export class AuthModule {}
