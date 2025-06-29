@@ -7,15 +7,29 @@ import { RegisterDto } from '../dto/create-auth.dto';
 import { LoginDto } from '../dto/login.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { GoogleAuthDto } from '../dto/google-auth.dto';
+import { GoogleAuthService } from '../services/google-auth/google-auth.service';
 
 @Controller()
 export class AuthController {
   constructor(
+    private readonly googleAuthService: GoogleAuthService,
     private readonly registerService: RegisterService,
     private readonly loginService: LoginService,
     private readonly verifyService: VerifyService,
     private readonly verificationTokenService: VerificationTokenService,
   ) {}
+
+  @Post('google-auth')
+  @ApiOperation({ summary: 'Login user by google' })
+  @ApiResponse({
+    status: 201,
+    description: 'Returns token',
+    type: String,
+  })
+  googleAuth(@Body() googleAuthDto: GoogleAuthDto) {
+    return this.googleAuthService.googleAuth(googleAuthDto);
+  }
 
   @Post('register')
   @ApiOperation({ summary: 'Register user by email' })

@@ -24,12 +24,12 @@ export class User {
   @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
 
-  @ApiProperty({ description: 'User password', required: true })
-  @Column({ type: 'varchar', length: 100 })
+  @ApiProperty({ description: 'User password', required: false })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   password: string;
 
-  @ApiProperty({ description: 'User phone number', required: true })
-  @Column({ type: 'varchar', length: 100 })
+  @ApiProperty({ description: 'User phone number', required: false })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   phone: string;
 
   @ApiProperty({ description: 'User photo', required: true })
