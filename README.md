@@ -4,6 +4,8 @@ Nostra Pizza backend built with NestJS and PostgreSQL for managing products, cat
 
 You can find the database schema [here](https://dbdiagram.io/d/Nostra-pizza-68579d28f039ec6d364ca6e8).
 
+To get a Google token for Google authentication, use this [tool](https://get-google-token.vercel.app/), a simple app developed by me.
+
 ## Project setup
 
 ```bash
