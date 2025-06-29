@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryResponse } from './cloudinary/cloudinary-response';
-const streamifier = require('streamifier');
+import * as streamifier from 'streamifier';
 
 @Injectable()
 export class CloudinaryService {
@@ -11,7 +9,8 @@ export class CloudinaryService {
     return new Promise<CloudinaryResponse>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         (error, result) => {
-          if (error || !result) return reject(error);
+          if (error) return reject(error as Error);
+          if (!result) return reject(new Error('No result from Cloudinary'));
           resolve(result);
         },
       );
