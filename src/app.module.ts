@@ -12,6 +12,7 @@ import { ProductsModule } from './catalog/products/products.module';
 import { SupplementsModule } from './catalog/supplements/supplements.module';
 import { AdminModule } from './admin/admin.module';
 import { OrderMailModule } from './order-mail/order-mail.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { OrderMailModule } from './order-mail/order-mail.module';
     SupplementsModule,
     AdminModule,
     OrderMailModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
