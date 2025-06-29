@@ -35,6 +35,9 @@ export class CreateProductDto {
   @IsBoolean()
   spicy: boolean;
 
+  @ApiProperty({ type: 'string', format: 'binary', required: true })
+  image: string;
+
   @ApiProperty({ example: 1, description: 'Category ID (foreign key)' })
   @IsNumber()
   @IsPositive()

@@ -4,11 +4,12 @@ import { ProductsController } from './controllers/products.controller';
 import { ProductsService } from './services/products.service';
 import { Product } from '../../catalog/products/entities/product.entity';
 import { Category } from 'src/catalog/categories/entities/category.entity';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product, Category])],
   controllers: [ProductsController],
-  providers: [ProductsService],
+  providers: [ProductsService, CloudinaryService],
   exports: [ProductsService],
 })
 export class ProductsModule {}

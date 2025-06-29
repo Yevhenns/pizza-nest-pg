@@ -75,6 +75,14 @@ export class Product {
   })
   spicy: boolean;
 
+  @ApiProperty({ description: 'Name of the product', required: true })
+  @Column({
+    type: 'varchar',
+    unique: true,
+    nullable: false,
+  })
+  image: string;
+
   @ApiProperty({ description: 'Creation date', readOnly: true })
   @CreateDateColumn({
     name: 'created_at',

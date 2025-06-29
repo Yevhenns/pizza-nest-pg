@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   HttpException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -11,6 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from 'src/catalog/products/entities/product.entity';
 import { Category } from 'src/catalog/categories/entities/category.entity';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService {
@@ -19,12 +22,27 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @Inject(CloudinaryService)
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   private readonly logger = new Logger(ProductsService.name);
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
+  async create(
+    createProductDto: CreateProductDto,
+    image: Express.Multer.File,
+  ): Promise<Product> {
     try {
+      if (!image) {
+        throw new BadRequestException('File is required');
+      }
+
+      const uploaded = await this.cloudinaryService.uploadFile(image);
+
+      if (!uploaded) {
+        throw new InternalServerErrorException('Failed to upload file');
+      }
+
       const category = await this.categoryRepository.findOneBy({
         id: createProductDto.categoryId,
       });
@@ -36,6 +54,7 @@ export class ProductsService {
 
       const newProduct = this.productRepository.create({
         ...createProductDto,
+        image: uploaded.secure_url as string,
         category,
       });
 

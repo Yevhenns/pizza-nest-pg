@@ -6,30 +6,43 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { ProductsService } from '../services/products.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product } from 'src/catalog/products/entities/product.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin/products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({
     status: 201,
     description: 'Returns created product',
     type: Product,
   })
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.productsService.create(createProductDto, image);
   }
 
   @Patch(':id')
