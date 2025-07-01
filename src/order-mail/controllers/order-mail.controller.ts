@@ -1,20 +1,25 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req } from '@nestjs/common';
 import { OrderMailService } from '../services/order-mail.service';
 import { CreateOrderMailDto } from '../dto/create-order-mail.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('order-mail')
 export class OrderMailController {
   constructor(private readonly orderMailService: OrderMailService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Send order by email' })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Send order by email',
+    description:
+      'Anyone can send an order. If a valid JWT token is provided, the order will also be saved to the database and linked to the authenticated user.',
+  })
   @ApiResponse({
     status: 201,
     description: 'Returns object { success: true }',
     type: Object,
   })
-  create(@Body() createOrderMailDto: CreateOrderMailDto) {
-    return this.orderMailService.create(createOrderMailDto);
+  create(@Req() req: Request, @Body() createOrderMailDto: CreateOrderMailDto) {
+    return this.orderMailService.create(req, createOrderMailDto);
   }
 }

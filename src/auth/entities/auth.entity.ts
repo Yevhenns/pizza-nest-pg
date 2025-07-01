@@ -6,9 +6,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserOrder } from 'src/order-mail/entities/order-mail.entity';
 
 @Entity('user')
 export class User {
@@ -79,4 +81,11 @@ export class User {
   @ManyToOne(() => Role, (role) => role.users, { nullable: false })
   @JoinColumn({ name: 'role_id' })
   role: Role;
+
+  @ApiProperty({
+    description: 'User orders relation',
+    type: () => [UserOrder],
+  })
+  @OneToMany(() => UserOrder, (userOrder) => userOrder.user)
+  userOrders: UserOrder[];
 }

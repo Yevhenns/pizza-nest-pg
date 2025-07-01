@@ -2,29 +2,42 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateOrderMailDto } from '../dto/create-order-mail.dto';
 import * as handlebars from 'handlebars';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import * as nodemailer from 'nodemailer';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserOrder } from '../entities/order-mail.entity';
+import { Repository } from 'typeorm';
+import { User } from 'src/auth/entities/auth.entity';
+import { JwtService } from '@nestjs/jwt';
+import { CustomJwtPayload } from 'src/auth/interfaces/auth.interface';
 
 @Injectable()
 export class OrderMailService {
+  constructor(
+    @InjectRepository(UserOrder)
+    private readonly userOrdersRepository: Repository<UserOrder>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private jwtService: JwtService,
+  ) {}
+
   private readonly logger = new Logger(OrderMailService.name);
 
   private readonly templatePath = join(__dirname, '../views/index.hbs');
 
   private loadTemplate(): string {
-    try {
-      return readFileSync(this.templatePath, 'utf8');
-    } catch (error) {
-      this.logger.error('Error reading template file', error);
-      throw error;
-    }
+    return readFileSync(this.templatePath, 'utf8');
   }
 
-  async create(createOrderMailDto: CreateOrderMailDto): Promise<{
+  async create(
+    req: Request,
+    createOrderMailDto: CreateOrderMailDto,
+  ): Promise<{
     success: boolean;
   }> {
     const email = process.env.EMAIL;
@@ -58,14 +71,45 @@ export class OrderMailService {
       },
     });
 
+    const authHeader = req.headers['authorization'] as string;
+    const token = authHeader?.split(' ')[1];
+
     try {
-      await transport.verify();
-      await transport.sendMail({
-        from: email,
-        to: email,
-        subject: 'Order',
-        html: htmlBody,
-      });
+      if (token) {
+        const payload: CustomJwtPayload = this.jwtService.decode(token);
+        const existingUser = await this.userRepository.findOne({
+          where: { id: payload.userId },
+          relations: ['role'],
+        });
+
+        if (!existingUser) {
+          this.logger.error('User not found');
+          throw new NotFoundException('User not found');
+        }
+
+        const newOrder = this.userOrdersRepository.create({
+          ...createOrderMailDto,
+          user: existingUser,
+        });
+
+        await this.userOrdersRepository.save(newOrder);
+
+        await transport.verify();
+        await transport.sendMail({
+          from: email,
+          to: email,
+          subject: 'Order',
+          html: htmlBody,
+        });
+      } else {
+        await transport.verify();
+        await transport.sendMail({
+          from: email,
+          to: email,
+          subject: 'Order',
+          html: htmlBody,
+        });
+      }
 
       return { success: true };
     } catch (error) {

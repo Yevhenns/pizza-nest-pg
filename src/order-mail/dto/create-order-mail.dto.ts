@@ -63,15 +63,6 @@ export class CreateOrderMailDto {
   comment?: string;
 
   @ApiProperty({
-    example: 'abc123',
-    description: 'User ID (optional)',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  userId?: string;
-
-  @ApiProperty({
     description: 'Array of ordered products',
     type: [OrderItemDto],
   })
