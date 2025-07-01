@@ -11,9 +11,9 @@ import { SupplementsService } from '../services/supplements.service';
 import { CreateSupplementDto } from '../dto/create-supplement.dto';
 import { UpdateSupplementDto } from '../dto/update-supplement.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { AdminGuard } from 'src/auth/guards/admin.guard';
-import { Supplement } from 'src/catalog/supplements/entities/supplement.entity';
+import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
+import { AdminGuard } from '~/auth/guards/admin.guard';
+import { Supplement } from '~/catalog/supplements/entities/supplement.entity';
 
 @Controller('admin/supplements')
 export class SupplementsController {

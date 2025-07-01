@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { ResendVerificationDto } from 'src/auth/dto/resend-verification.dto';
+import { ResendVerificationDto } from '~/auth/dto/resend-verification.dto';
 import { User } from '~/user/entities/user.entity';
 
 @Injectable()

@@ -15,12 +15,12 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
+import { AdminGuard } from '~/auth/guards/admin.guard';
 import { ProductsService } from '../services/products.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
-import { Product } from 'src/catalog/products/entities/product.entity';
+import { Product } from '~/catalog/products/entities/product.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin/products')

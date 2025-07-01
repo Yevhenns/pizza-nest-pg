@@ -6,16 +6,16 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { RegisterDto } from '../../dto/create-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Role } from 'src/roles/entities/role.entity';
+import { Role } from '~/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
-import { UserRole } from 'src/roles/interfaces/role.interface';
+import { UserRole } from '~/roles/interfaces/role.interface';
 import { JwtService } from '@nestjs/jwt';
 
 import { EmailService } from '../email/email.service';
 import { User } from '~/user/entities/user.entity';
+import { CreateUserDto } from '~/user/dto/create-user.dto';
 
 @Injectable()
 export class RegisterService {
@@ -30,7 +30,7 @@ export class RegisterService {
     private readonly emailService: EmailService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<{
+  async register(createUserDto: CreateUserDto): Promise<{
     message: string;
   }> {
     try {
@@ -38,12 +38,12 @@ export class RegisterService {
         name: UserRole.USER,
       });
       if (!userRole) {
-        this.logger.warn(`Role with id ${registerDto.roleId} not found`);
+        this.logger.warn(`Role with id ${createUserDto.roleId} not found`);
         throw new NotFoundException('Role not found');
       }
 
       const existingUser = await this.userRepository.findOne({
-        where: { email: registerDto.email },
+        where: { email: createUserDto.email },
         relations: ['role'],
       });
 
@@ -57,10 +57,10 @@ export class RegisterService {
         throw new ConflictException('Email already in use but is not verified');
       }
 
-      const hashPassword = await bcrypt.hash(registerDto.password, 10);
+      const hashPassword = await bcrypt.hash(createUserDto.password, 10);
 
       const newUser = this.userRepository.create({
-        ...registerDto,
+        ...createUserDto,
         password: hashPassword,
         role: userRole,
       });

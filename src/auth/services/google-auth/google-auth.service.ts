@@ -9,9 +9,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OAuth2Client } from 'google-auth-library';
-import { GoogleAuthDto } from 'src/auth/dto/google-auth.dto';
-import { Role } from 'src/roles/entities/role.entity';
-import { UserRole } from 'src/roles/interfaces/role.interface';
+import { GoogleAuthDto } from '~/auth/dto/google-auth.dto';
+import { Role } from '~/roles/entities/role.entity';
+import { UserRole } from '~/roles/interfaces/role.interface';
 import { Repository } from 'typeorm';
 import { User } from '~/user/entities/user.entity';
 
