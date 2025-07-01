@@ -1,7 +1,11 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/auth/entities/auth.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -22,8 +26,17 @@ export class UserOrder {
   @Column({ length: 200, nullable: true })
   comment?: string;
 
-  @Column({ length: 200, nullable: true })
-  userId?: string;
+  @ApiProperty({
+    description: 'User relation',
+    type: () => User,
+    required: true,
+    nullable: false,
+  })
+  @ManyToOne(() => User, (user) => user.userOrders, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column({ type: 'jsonb' })
   order: {
