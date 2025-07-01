@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AuthSuccessDto {
+export class SuccessDto {
   @ApiProperty({
     example: 'Operation completed successfully.',
     description: 'General success message',

@@ -9,7 +9,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GoogleAuthDto } from '../dto/google-auth.dto';
 import { GoogleAuthService } from '../services/google-auth/google-auth.service';
 import { CreateUserDto } from '~/user/dto/create-user.dto';
-import { AuthSuccessDto } from '../dto/auth-success.dto';
+import { SuccessDto } from '~/dto/success.dto';
 
 @Controller()
 export class AuthController {
@@ -38,7 +38,7 @@ export class AuthController {
     status: 201,
     description:
       'Returns object {message: "User registered successfully. Verification email sent."}',
-    type: AuthSuccessDto,
+    type: SuccessDto,
   })
   create(@Body() createUserDto: CreateUserDto) {
     return this.registerService.register(createUserDto);
@@ -60,7 +60,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: "Returns object { message: 'Email verified successfully' }",
-    type: AuthSuccessDto,
+    type: SuccessDto,
   })
   verifyEmail(@Param('token') token: string) {
     return this.verifyService.verifyEmail(token);
@@ -72,7 +72,7 @@ export class AuthController {
     status: 201,
     description:
       'Returns object {message: "Verification email has been resent."}',
-    type: AuthSuccessDto,
+    type: SuccessDto,
   })
   resendEmailVerification(
     @Body() resendVerificationDto: ResendVerificationDto,
