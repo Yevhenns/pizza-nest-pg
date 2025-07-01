@@ -1,4 +1,12 @@
-import { Controller, Get, Body, Patch, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+  Delete,
+} from '@nestjs/common';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../services/user.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -69,5 +77,18 @@ export class UserController {
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.userService.changePassword(user, changePasswordDto);
+  }
+
+  @Delete()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Delete user by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns object { message: "User with ID # removed" }',
+    type: Object,
+  })
+  remove(@CurrentUser() user: CustomJwtPayload) {
+    return this.userService.remove(user);
   }
 }

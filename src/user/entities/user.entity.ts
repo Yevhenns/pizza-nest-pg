@@ -86,6 +86,9 @@ export class User {
     description: 'User orders relation',
     type: () => [UserOrder],
   })
-  @OneToMany(() => UserOrder, (userOrder) => userOrder.user)
+  @OneToMany(() => UserOrder, (userOrder) => userOrder.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   userOrders: UserOrder[];
 }

@@ -109,4 +109,30 @@ export class UserService {
       throw new InternalServerErrorException('Update user failed');
     }
   }
+
+  async remove(user: CustomJwtPayload): Promise<{
+    message: string;
+  }> {
+    try {
+      const existingUser = await this.userRepository.findOneBy({
+        id: user.userId,
+      });
+      if (!existingUser) {
+        this.logger.warn(`User not found`);
+        throw new NotFoundException('User not found');
+      }
+
+      await this.userRepository.remove(existingUser);
+
+      return { message: `User with ID #${user.id} removed` };
+    } catch (error) {
+      this.logger.error('Error during delete user', error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Delete user failed');
+    }
+  }
 }

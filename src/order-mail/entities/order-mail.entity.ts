@@ -34,6 +34,7 @@ export class UserOrder {
   })
   @ManyToOne(() => User, (user) => user.userOrders, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
