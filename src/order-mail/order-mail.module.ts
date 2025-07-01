@@ -3,8 +3,8 @@ import { OrderMailController } from './controllers/order-mail.controller';
 import { OrderMailService } from './services/order-mail.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserOrder } from './entities/order-mail.entity';
-import { User } from 'src/auth/entities/auth.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { User } from '~/user/entities/user.entity';
 
 @Module({
   imports: [

@@ -3,8 +3,8 @@ import { UsersService } from '../services/users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
-import { User } from 'src/auth/entities/auth.entity';
 import { UpdateUserRoleDto } from '../dto/update-user.dto';
+import { User } from '~/user/entities/user.entity';
 
 @Controller('admin/users')
 export class UsersController {

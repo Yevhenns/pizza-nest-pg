@@ -12,9 +12,9 @@ import * as nodemailer from 'nodemailer';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserOrder } from '../entities/order-mail.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/auth/entities/auth.entity';
 import { JwtService } from '@nestjs/jwt';
-import { CustomJwtPayload } from 'src/auth/interfaces/auth.interface';
+import { User } from '~/user/entities/user.entity';
+import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
 
 @Injectable()
 export class OrderMailService {
