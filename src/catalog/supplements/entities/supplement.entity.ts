@@ -49,6 +49,7 @@ export class Supplement {
 
   @ManyToOne(() => Category, (category) => category.supplements, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'category_id' })
   category: Category;

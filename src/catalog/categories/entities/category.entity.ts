@@ -51,6 +51,9 @@ export class Category {
     description: 'Supplements relation',
     type: () => [Supplement],
   })
-  @OneToMany(() => Supplement, (supplement) => supplement.category)
+  @OneToMany(() => Supplement, (supplement) => supplement.category, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   supplements: Supplement[];
 }
