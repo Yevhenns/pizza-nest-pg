@@ -54,7 +54,7 @@ export class ProductsService {
 
       const newProduct = this.productRepository.create({
         ...createProductDto,
-        image: uploaded.secure_url as string,
+        image: uploaded.public_id as string,
         category,
       });
 
@@ -131,6 +131,8 @@ export class ProductsService {
       }
 
       await this.productRepository.remove(product);
+
+      await this.cloudinaryService.deleteFile(product.image);
 
       return { message: `Product with ID #${id} removed` };
     } catch (error) {
