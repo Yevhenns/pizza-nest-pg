@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
@@ -12,6 +13,7 @@ import { Repository } from 'typeorm';
 import { UserOrder } from '~/order-mail/entities/order-mail.entity';
 import { User } from '../entities/user.entity';
 import { ChangePasswordDto } from '../dto/change-password.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -93,12 +95,25 @@ export class UserService {
         this.logger.warn(`User not found`);
         throw new NotFoundException('User not found');
       }
-      const updated = this.userRepository.merge(
-        existingUser,
-        changePasswordDto,
+
+      const isPasswordValid = bcrypt.compareSync(
+        changePasswordDto.password,
+        existingUser.password,
       );
 
-      return await this.userRepository.save(updated);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('Incorrect password');
+      }
+
+      const hashPassword = await bcrypt.hash(changePasswordDto.newPassword, 10);
+
+      const updated = this.userRepository.merge(existingUser, {
+        password: hashPassword,
+      });
+
+      await this.userRepository.save(updated);
+
+      return { success: true };
     } catch (error) {
       this.logger.error('Error during update user', error);
 
@@ -124,7 +139,7 @@ export class UserService {
 
       await this.userRepository.remove(existingUser);
 
-      return { message: `User with ID #${user.id} removed` };
+      return { message: `User with ID #${user.userId} removed` };
     } catch (error) {
       this.logger.error('Error during delete user', error);
 
