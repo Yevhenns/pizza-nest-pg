@@ -84,9 +84,7 @@ export class UserService {
       }
 
       const updated = this.userRepository.merge(existingUser, {
-        name: updateUserDto.name || existingUser.name,
-        email: updateUserDto.email || existingUser.email,
-        phone: updateUserDto.phone || existingUser.phone,
+        ...updateUserDto,
         avatar: uploadedUrl || existingUser.avatar,
       });
 

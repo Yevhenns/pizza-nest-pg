@@ -102,12 +102,7 @@ export class ProductsService {
       }
 
       const updated = this.productRepository.merge(product, {
-        name: updateProductDto.name || product.name,
-        price: updateProductDto.price || product.price,
-        promPrice: updateProductDto.promPrice || product.promPrice,
-        promotion: updateProductDto.promotion || product.promotion,
-        vegan: updateProductDto.vegan || product.vegan,
-        spicy: updateProductDto.spicy || product.spicy,
+        ...updateProductDto,
         image: uploadedUrl || product.image,
         category,
       });
