@@ -21,7 +21,7 @@ export class CreateProductDto {
   @ApiProperty({ example: 180, description: 'Promotional price' })
   @IsNumber()
   @IsPositive()
-  PromPrice: number;
+  promPrice: number;
 
   @ApiProperty({ example: true, description: 'Is under promotion' })
   @IsBoolean()

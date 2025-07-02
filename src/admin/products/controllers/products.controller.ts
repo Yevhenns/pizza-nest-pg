@@ -54,8 +54,14 @@ export class ProductsController {
     description: 'Returns updated product',
     type: CreateProductDto,
   })
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.productsService.update(+id, updateProductDto, image);
   }
 
   @Delete(':id')

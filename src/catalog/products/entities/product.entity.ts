@@ -32,7 +32,7 @@ export class Product {
     type: 'decimal',
     nullable: false,
   })
-  PromPrice: number;
+  promPrice: number;
 
   @Column({
     type: 'boolean',
