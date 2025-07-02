@@ -14,6 +14,7 @@ import { CategoriesService } from '../services/categories.service';
 import { AdminGuard } from '~/auth/guards/admin.guard';
 import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
 import { Category } from '~/catalog/categories/entities/category.entity';
+import { SuccessDto } from '~/dto/success.dto';
 
 @Controller('admin/categories')
 export class CategoriesController {
@@ -55,7 +56,7 @@ export class CategoriesController {
   @ApiResponse({
     status: 200,
     description: 'Returns object { message: "Category with ID # removed" }',
-    type: Object,
+    type: SuccessDto,
   })
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(+id);

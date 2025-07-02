@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
-import { Product } from '../entities/product.entity';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { CreateProductDto } from '~/admin/products/dto/create-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -12,7 +12,7 @@ export class ProductsController {
   @ApiResponse({
     status: 200,
     description: 'Returns products list',
-    type: [Product],
+    type: [CreateProductDto],
   })
   @ApiQuery({ name: 'categoryId', required: false, type: Number })
   findAll(@Query('categoryId') categoryId?: string) {
@@ -24,8 +24,7 @@ export class ProductsController {
   @ApiResponse({
     status: 200,
     description: 'Returns promotions products list',
-    type: Product,
-    isArray: true,
+    type: [CreateProductDto],
   })
   findPromotions() {
     return this.productsService.findPromotions();
@@ -36,7 +35,7 @@ export class ProductsController {
   @ApiResponse({
     status: 200,
     description: 'Returns product by ID',
-    type: Product,
+    type: CreateProductDto,
   })
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(+id);

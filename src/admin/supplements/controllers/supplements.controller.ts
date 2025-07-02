@@ -13,7 +13,7 @@ import { UpdateSupplementDto } from '../dto/update-supplement.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
 import { AdminGuard } from '~/auth/guards/admin.guard';
-import { Supplement } from '~/catalog/supplements/entities/supplement.entity';
+import { SuccessDto } from '~/dto/success.dto';
 
 @Controller('admin/supplements')
 export class SupplementsController {
@@ -26,7 +26,7 @@ export class SupplementsController {
   @ApiResponse({
     status: 201,
     description: 'Returns created supplement',
-    type: Supplement,
+    type: CreateSupplementDto,
   })
   create(@Body() createSupplementDto: CreateSupplementDto) {
     return this.supplementsService.create(createSupplementDto);
@@ -39,7 +39,7 @@ export class SupplementsController {
   @ApiResponse({
     status: 200,
     description: 'Returns updated supplement',
-    type: Supplement,
+    type: CreateSupplementDto,
   })
   update(
     @Param('id') id: string,
@@ -55,7 +55,7 @@ export class SupplementsController {
   @ApiResponse({
     status: 200,
     description: 'Returns object { message: "Supplement with ID # removed" }',
-    type: Object,
+    type: SuccessDto,
   })
   remove(@Param('id') id: string) {
     return this.supplementsService.remove(+id);
