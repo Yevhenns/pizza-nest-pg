@@ -11,7 +11,7 @@ import {
   IsUrl,
 } from 'class-validator';
 
-export class RegisterDto {
+export class CreateUserDto {
   @ApiProperty({
     description: 'User name',
     example: 'Alex',

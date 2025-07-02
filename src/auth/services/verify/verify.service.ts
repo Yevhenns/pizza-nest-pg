@@ -6,10 +6,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../entities/auth.entity';
 import { Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 import { CustomJwtPayload } from '../../interfaces/auth.interface';
+import { User } from '~/user/entities/user.entity';
 
 @Injectable()
 export class VerifyService {

@@ -10,10 +10,11 @@ import {
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AdminGuard } from 'src/auth/guards/admin.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CategoriesService } from '../services/categories.service';
-import { Category } from 'src/catalog/categories/entities/category.entity';
+import { AdminGuard } from '~/auth/guards/admin.guard';
+import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
+import { Category } from '~/catalog/categories/entities/category.entity';
+import { SuccessDto } from '~/dto/success.dto';
 
 @Controller('admin/categories')
 export class CategoriesController {
@@ -55,7 +56,7 @@ export class CategoriesController {
   @ApiResponse({
     status: 200,
     description: 'Returns object { message: "Category with ID # removed" }',
-    type: Object,
+    type: SuccessDto,
   })
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(+id);

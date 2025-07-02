@@ -13,6 +13,7 @@ import { SupplementsModule } from './catalog/supplements/supplements.module';
 import { AdminModule } from './admin/admin.module';
 import { OrderMailModule } from './order-mail/order-mail.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     AdminModule,
     OrderMailModule,
     CloudinaryModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsController } from './controllers/products.controller';
 import { ProductsService } from './services/products.service';
-import { Product } from '../../catalog/products/entities/product.entity';
-import { Category } from 'src/catalog/categories/entities/category.entity';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { Category } from '~/catalog/categories/entities/category.entity';
+import { CloudinaryService } from '~/cloudinary/cloudinary.service';
+import { Product } from '~/catalog/products/entities/product.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product, Category])],

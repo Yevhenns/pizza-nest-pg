@@ -10,7 +10,7 @@ import { UpdateSupplementDto } from '../dto/update-supplement.dto';
 import { Supplement } from '../../../catalog/supplements/entities/supplement.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Category } from 'src/catalog/categories/entities/category.entity';
+import { Category } from '~/catalog/categories/entities/category.entity';
 
 @Injectable()
 export class SupplementsService {

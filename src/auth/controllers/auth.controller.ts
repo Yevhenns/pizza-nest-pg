@@ -3,12 +3,13 @@ import { RegisterService } from '../services/register/register.service';
 import { LoginService } from '../services/login/login.service';
 import { VerifyService } from '../services/verify/verify.service';
 import { VerificationTokenService } from '../services/verification-token/verification-token.service';
-import { RegisterDto } from '../dto/create-auth.dto';
 import { LoginDto } from '../dto/login.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GoogleAuthDto } from '../dto/google-auth.dto';
 import { GoogleAuthService } from '../services/google-auth/google-auth.service';
+import { CreateUserDto } from '~/user/dto/create-user.dto';
+import { SuccessDto } from '~/dto/success.dto';
 
 @Controller()
 export class AuthController {
@@ -37,10 +38,10 @@ export class AuthController {
     status: 201,
     description:
       'Returns object {message: "User registered successfully. Verification email sent."}',
-    type: Object,
+    type: SuccessDto,
   })
-  create(@Body() registerDto: RegisterDto) {
-    return this.registerService.register(registerDto);
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.registerService.register(createUserDto);
   }
 
   @Post('login')
@@ -59,7 +60,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: "Returns object { message: 'Email verified successfully' }",
-    type: Object,
+    type: SuccessDto,
   })
   verifyEmail(@Param('token') token: string) {
     return this.verifyService.verifyEmail(token);
@@ -71,7 +72,7 @@ export class AuthController {
     status: 201,
     description:
       'Returns object {message: "Verification email has been resent."}',
-    type: Object,
+    type: SuccessDto,
   })
   resendEmailVerification(
     @Body() resendVerificationDto: ResendVerificationDto,

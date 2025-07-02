@@ -11,9 +11,9 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from 'src/catalog/products/entities/product.entity';
-import { Category } from 'src/catalog/categories/entities/category.entity';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { Product } from '~/catalog/products/entities/product.entity';
+import { Category } from '~/catalog/categories/entities/category.entity';
+import { CloudinaryService } from '~/cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService {

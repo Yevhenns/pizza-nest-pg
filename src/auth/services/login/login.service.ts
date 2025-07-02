@@ -8,11 +8,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginDto } from 'src/auth/dto/login.dto';
-import { User } from 'src/auth/entities/auth.entity';
+import { LoginDto } from '~/auth/dto/login.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '~/user/entities/user.entity';
 
 @Injectable()
 export class LoginService {

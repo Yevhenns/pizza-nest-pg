@@ -1,5 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/auth/entities/auth.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from '~/user/entities/user.entity';
 
 @Entity('user_orders')
 export class UserOrder {
@@ -26,14 +25,9 @@ export class UserOrder {
   @Column({ length: 200, nullable: true })
   comment?: string;
 
-  @ApiProperty({
-    description: 'User relation',
-    type: () => User,
-    required: true,
-    nullable: false,
-  })
   @ManyToOne(() => User, (user) => user.userOrders, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
   user: User;

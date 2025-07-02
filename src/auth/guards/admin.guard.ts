@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CustomJwtPayload } from '../interfaces/auth.interface';
-import { UserRole } from 'src/roles/interfaces/role.interface';
+import { UserRole } from '~/roles/interfaces/role.interface';
 import { Request } from 'express';
 
 @Injectable()

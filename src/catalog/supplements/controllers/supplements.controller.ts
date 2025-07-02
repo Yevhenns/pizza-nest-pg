@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { SupplementsService } from '../services/supplements.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Supplement } from '../entities/supplement.entity';
+import { CreateSupplementDto } from '~/admin/supplements/dto/create-supplement.dto';
 
 @Controller('supplements')
 export class SupplementsController {
@@ -12,8 +12,7 @@ export class SupplementsController {
   @ApiResponse({
     status: 200,
     description: 'Returns supplements list',
-    type: Supplement,
-    isArray: true,
+    type: [CreateSupplementDto],
   })
   findAll() {
     return this.supplementsService.findAll();
@@ -24,7 +23,7 @@ export class SupplementsController {
   @ApiResponse({
     status: 200,
     description: 'Returns supplement by ID',
-    type: Supplement,
+    type: CreateSupplementDto,
   })
   findOne(@Param('id') id: string) {
     return this.supplementsService.findOne(+id);

@@ -1,10 +1,10 @@
 import { Controller, Get, Body, Patch, Param, UseGuards } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { AdminGuard } from 'src/auth/guards/admin.guard';
-import { User } from 'src/auth/entities/auth.entity';
+import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
+import { AdminGuard } from '~/auth/guards/admin.guard';
 import { UpdateUserRoleDto } from '../dto/update-user.dto';
+import { CreateUserDto } from '~/user/dto/create-user.dto';
 
 @Controller('admin/users')
 export class UsersController {
@@ -17,7 +17,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'Returns users',
-    type: [User],
+    type: [CreateUserDto],
   })
   findAll() {
     return this.usersService.findAll();
@@ -30,7 +30,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'Returns user by ID',
-    type: User,
+    type: CreateUserDto,
   })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
@@ -43,7 +43,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'Returns updated user',
-    type: User,
+    type: CreateUserDto,
   })
   updateRole(
     @Param('id') id: string,
