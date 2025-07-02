@@ -8,6 +8,9 @@ export class CloudinaryService {
   uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse> {
     return new Promise<CloudinaryResponse>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'nostra-nest',
+        },
         (error, result) => {
           if (error) return reject(error as Error);
           if (!result) return reject(new Error('No result from Cloudinary'));
@@ -16,6 +19,18 @@ export class CloudinaryService {
       );
 
       streamifier.createReadStream(file.buffer).pipe(uploadStream);
+    });
+  }
+  deleteFile(publicId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      void cloudinary.uploader.destroy(
+        publicId,
+        { invalidate: true },
+        (error, result) => {
+          if (error) return reject(error as Error);
+          resolve(result);
+        },
+      );
     });
   }
 }
