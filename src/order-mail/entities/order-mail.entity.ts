@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -26,12 +25,6 @@ export class UserOrder {
   @Column({ length: 200, nullable: true })
   comment?: string;
 
-  @ApiProperty({
-    description: 'User relation',
-    type: () => User,
-    required: true,
-    nullable: false,
-  })
   @ManyToOne(() => User, (user) => user.userOrders, {
     nullable: false,
     onDelete: 'CASCADE',

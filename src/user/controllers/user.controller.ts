@@ -16,6 +16,7 @@ import { CurrentUser } from '../decorators/user.decorator';
 import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
 import { ToUserDto } from '../dto/to-user.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
+import { SuccessDto } from '~/dto/success.dto';
 
 @Controller('user')
 export class UserController {
@@ -69,8 +70,8 @@ export class UserController {
   @ApiOperation({ summary: 'Change user password' })
   @ApiResponse({
     status: 200,
-    description: 'Returns info message',
-    type: String,
+    description: 'Returns object { success: true }',
+    type: SuccessDto,
   })
   changePassword(
     @CurrentUser() user: CustomJwtPayload,
@@ -86,7 +87,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Returns object { message: "User with ID # removed" }',
-    type: Object,
+    type: SuccessDto,
   })
   remove(@CurrentUser() user: CustomJwtPayload) {
     return this.userService.remove(user);

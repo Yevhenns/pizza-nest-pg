@@ -2,6 +2,7 @@ import { Controller, Post, Body, Req } from '@nestjs/common';
 import { OrderMailService } from '../services/order-mail.service';
 import { CreateOrderMailDto } from '../dto/create-order-mail.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { SuccessDto } from '~/dto/success.dto';
 
 @Controller('order-mail')
 export class OrderMailController {
@@ -17,7 +18,7 @@ export class OrderMailController {
   @ApiResponse({
     status: 201,
     description: 'Returns object { success: true }',
-    type: Object,
+    type: SuccessDto,
   })
   create(@Req() req: Request, @Body() createOrderMailDto: CreateOrderMailDto) {
     return this.orderMailService.create(req, createOrderMailDto);
