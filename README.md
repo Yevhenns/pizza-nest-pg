@@ -20,6 +20,16 @@ Copy .env.example to .env and fill in the required values:
 $ cp .env.example .env
 ```
 
+## Database setup
+
+Before running the app, create the PostgreSQL database manually. You can do this via psql or any database client.
+
+Then run:
+
+```sql
+CREATE DATABASE your_database_name;
+```
+
 ## Run seed
 
 ```bash
