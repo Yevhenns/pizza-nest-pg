@@ -14,6 +14,7 @@ import { UserOrder } from '~/order-mail/entities/order-mail.entity';
 import { User } from '../entities/user.entity';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
+import { CloudinaryService } from '~/cloudinary/cloudinary.service';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
     private readonly userOrdersRepository: Repository<UserOrder>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   private readonly logger = new Logger(UserService.name);
@@ -60,7 +62,11 @@ export class UserService {
     }
   }
 
-  async update(user: CustomJwtPayload, updateUserDto: UpdateUserDto) {
+  async update(
+    user: CustomJwtPayload,
+    updateUserDto: UpdateUserDto,
+    avatar: Express.Multer.File,
+  ) {
     try {
       const existingUser = await this.userRepository.findOneBy({
         id: user.userId,
@@ -69,7 +75,18 @@ export class UserService {
         this.logger.warn(`User not found`);
         throw new NotFoundException('User not found');
       }
-      const updated = this.userRepository.merge(existingUser, updateUserDto);
+
+      let uploadedUrl: string | undefined;
+
+      if (avatar) {
+        const uploaded = await this.cloudinaryService.uploadFile(avatar);
+        uploadedUrl = uploaded.secure_url as string;
+      }
+
+      const updated = this.userRepository.merge(existingUser, {
+        ...updateUserDto,
+        avatar: uploadedUrl || existingUser.avatar,
+      });
 
       return await this.userRepository.save(updated);
     } catch (error) {

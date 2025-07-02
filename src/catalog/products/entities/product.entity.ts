@@ -32,7 +32,7 @@ export class Product {
     type: 'decimal',
     nullable: false,
   })
-  PromPrice: number;
+  promPrice: number;
 
   @Column({
     type: 'boolean',
@@ -75,6 +75,7 @@ export class Product {
 
   @ManyToOne(() => Category, (category) => category.products, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'category_id' })
   category: Category;

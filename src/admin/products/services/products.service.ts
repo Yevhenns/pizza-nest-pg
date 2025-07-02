@@ -75,6 +75,7 @@ export class ProductsService {
   async update(
     id: number,
     updateProductDto: UpdateProductDto,
+    image: Express.Multer.File,
   ): Promise<Product> {
     try {
       const category = await this.categoryRepository.findOneBy({
@@ -93,8 +94,16 @@ export class ProductsService {
         throw new NotFoundException('Product not found');
       }
 
+      let uploadedUrl: string | undefined;
+
+      if (image) {
+        const uploaded = await this.cloudinaryService.uploadFile(image);
+        uploadedUrl = uploaded.secure_url as string;
+      }
+
       const updated = this.productRepository.merge(product, {
         ...updateProductDto,
+        image: uploadedUrl || product.image,
         category,
       });
 

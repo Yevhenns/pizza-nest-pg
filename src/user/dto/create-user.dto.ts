@@ -55,7 +55,7 @@ export class CreateUserDto {
   })
   @IsUrl()
   @IsOptional()
-  avatar?: string;
+  avatar: string;
 
   @ApiHideProperty()
   @IsNumber()
