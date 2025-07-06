@@ -115,7 +115,6 @@ export class ProductsService {
         image: uploadedUrl || product.image,
         category,
       });
-      console.log(uploadedUrl);
 
       if (uploadedUrl) {
         await this.cloudinaryService.deleteFile(oldImageId);

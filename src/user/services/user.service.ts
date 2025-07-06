@@ -73,9 +73,11 @@ export class UserService {
         id: user.userId,
       });
       if (!existingUser) {
-        this.logger.warn(`User not found`);
+        this.logger.warn('User not found');
         throw new NotFoundException('User not found');
       }
+
+      const oldImageId = existingUser.avatar;
 
       let uploadedUrl: string | undefined;
 
@@ -84,13 +86,17 @@ export class UserService {
           avatar,
           this.folderName,
         );
-        uploadedUrl = uploaded.secure_url as string;
+        uploadedUrl = uploaded.public_id as string;
       }
 
       const updated = this.userRepository.merge(existingUser, {
         ...updateUserDto,
         avatar: uploadedUrl || existingUser.avatar,
       });
+
+      if (uploadedUrl && oldImageId) {
+        await this.cloudinaryService.deleteFile(oldImageId);
+      }
 
       return await this.userRepository.save(updated);
     } catch (error) {
@@ -113,7 +119,7 @@ export class UserService {
         id: user.userId,
       });
       if (!existingUser) {
-        this.logger.warn(`User not found`);
+        this.logger.warn('User not found');
         throw new NotFoundException('User not found');
       }
 
@@ -154,13 +160,17 @@ export class UserService {
         id: user.userId,
       });
       if (!existingUser) {
-        this.logger.warn(`User not found`);
+        this.logger.warn('User not found');
         throw new NotFoundException('User not found');
       }
 
       await this.userRepository.remove(existingUser);
 
-      return { message: `User with ID #${user.userId} removed` };
+      if (existingUser.avatar) {
+        await this.cloudinaryService.deleteFile(existingUser.avatar);
+      }
+
+      return { message: 'User removed' };
     } catch (error) {
       this.logger.error('Error during delete user', error);
 
