@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '~/catalog/products/entities/product.entity';
 import { Category } from '~/catalog/categories/entities/category.entity';
-import { CloudinaryService } from '~/cloudinary/cloudinary.service';
+import { CloudinaryService } from '~/cloudinary/services/cloudinary.service';
 
 @Injectable()
 export class ProductsService {

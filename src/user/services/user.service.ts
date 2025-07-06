@@ -14,7 +14,7 @@ import { UserOrder } from '~/order-mail/entities/order-mail.entity';
 import { User } from '../entities/user.entity';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
-import { CloudinaryService } from '~/cloudinary/cloudinary.service';
+import { CloudinaryService } from '~/cloudinary/services/cloudinary.service';
 
 @Injectable()
 export class UserService {
