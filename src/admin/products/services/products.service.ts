@@ -27,6 +27,7 @@ export class ProductsService {
   ) {}
 
   private readonly logger = new Logger(ProductsService.name);
+  private readonly folderName = 'products';
 
   async create(
     createProductDto: CreateProductDto,
@@ -37,12 +38,6 @@ export class ProductsService {
         throw new BadRequestException('File is required');
       }
 
-      const uploaded = await this.cloudinaryService.uploadFile(image);
-
-      if (!uploaded) {
-        throw new InternalServerErrorException('Failed to upload file');
-      }
-
       const category = await this.categoryRepository.findOneBy({
         id: createProductDto.categoryId,
       });
@@ -50,6 +45,15 @@ export class ProductsService {
       if (!category) {
         this.logger.error('Category not found');
         throw new NotFoundException('Category not found');
+      }
+
+      const uploaded = await this.cloudinaryService.uploadFile(
+        image,
+        this.folderName,
+      );
+
+      if (!uploaded) {
+        throw new InternalServerErrorException('Failed to upload file');
       }
 
       const newProduct = this.productRepository.create({
@@ -94,11 +98,16 @@ export class ProductsService {
         throw new NotFoundException('Product not found');
       }
 
+      const oldImageId = product.image;
+
       let uploadedUrl: string | undefined;
 
       if (image) {
-        const uploaded = await this.cloudinaryService.uploadFile(image);
-        uploadedUrl = uploaded.secure_url as string;
+        const uploaded = await this.cloudinaryService.uploadFile(
+          image,
+          this.folderName,
+        );
+        uploadedUrl = uploaded.public_id as string;
       }
 
       const updated = this.productRepository.merge(product, {
@@ -106,6 +115,11 @@ export class ProductsService {
         image: uploadedUrl || product.image,
         category,
       });
+      console.log(uploadedUrl);
+
+      if (uploadedUrl) {
+        await this.cloudinaryService.deleteFile(oldImageId);
+      }
 
       return await this.productRepository.save(updated);
     } catch (error) {
@@ -126,7 +140,7 @@ export class ProductsService {
       const product = await this.productRepository.findOneBy({ id });
 
       if (!product) {
-        this.logger.warn(`Product with id ${id} not found`);
+        this.logger.warn('Product not found');
         throw new NotFoundException('Product not found');
       }
 
@@ -134,7 +148,7 @@ export class ProductsService {
 
       await this.cloudinaryService.deleteFile(product.image);
 
-      return { message: `Product with ID #${id} removed` };
+      return { message: 'Product removed' };
     } catch (error) {
       this.logger.error('Error during delete product', error);
 

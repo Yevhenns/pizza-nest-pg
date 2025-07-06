@@ -27,6 +27,7 @@ export class UserService {
   ) {}
 
   private readonly logger = new Logger(UserService.name);
+  private readonly folderName = 'users';
 
   async findAllOrders(user: CustomJwtPayload): Promise<UserOrder[]> {
     try {
@@ -79,7 +80,10 @@ export class UserService {
       let uploadedUrl: string | undefined;
 
       if (avatar) {
-        const uploaded = await this.cloudinaryService.uploadFile(avatar);
+        const uploaded = await this.cloudinaryService.uploadFile(
+          avatar,
+          this.folderName,
+        );
         uploadedUrl = uploaded.secure_url as string;
       }
 
