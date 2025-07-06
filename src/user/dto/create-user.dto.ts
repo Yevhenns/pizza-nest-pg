@@ -4,11 +4,9 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsPhoneNumber,
   IsString,
   IsStrongPassword,
-  IsUrl,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -47,15 +45,6 @@ export class CreateUserDto {
   @IsPhoneNumber()
   @IsNotEmpty()
   phone: string;
-
-  @ApiProperty({
-    description: 'User avatar URL',
-    example: 'https://example.com/avatar.jpg',
-    required: false,
-  })
-  @IsUrl()
-  @IsOptional()
-  avatar: string;
 
   @ApiHideProperty()
   @IsNumber()

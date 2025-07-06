@@ -14,7 +14,8 @@ import { UserOrder } from '~/order-mail/entities/order-mail.entity';
 import { User } from '../entities/user.entity';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
-import { CloudinaryService } from '~/cloudinary/cloudinary.service';
+import { CloudinaryService } from '~/cloudinary/services/cloudinary.service';
+import { ToUserDto } from '../dto/to-user.dto';
 
 @Injectable()
 export class UserService {
@@ -27,6 +28,35 @@ export class UserService {
   ) {}
 
   private readonly logger = new Logger(UserService.name);
+  private readonly folderName = 'users';
+
+  async findUser(user: CustomJwtPayload): Promise<ToUserDto> {
+    try {
+      const existingUser = await this.userRepository.findOne({
+        where: { id: user.userId },
+      });
+
+      if (!existingUser) {
+        this.logger.error('User not found');
+        throw new NotFoundException('User not found');
+      }
+
+      const userInfo: ToUserDto = {
+        name: existingUser.name,
+        avatar: existingUser.avatar,
+        email: existingUser.email,
+        phone: existingUser.phone,
+      };
+
+      return userInfo;
+    } catch (error) {
+      this.logger.error('Get orders failed', error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Get orders failed');
+    }
+  }
 
   async findAllOrders(user: CustomJwtPayload): Promise<UserOrder[]> {
     try {
@@ -72,21 +102,30 @@ export class UserService {
         id: user.userId,
       });
       if (!existingUser) {
-        this.logger.warn(`User not found`);
+        this.logger.warn('User not found');
         throw new NotFoundException('User not found');
       }
+
+      const oldImageId = existingUser.avatar;
 
       let uploadedUrl: string | undefined;
 
       if (avatar) {
-        const uploaded = await this.cloudinaryService.uploadFile(avatar);
-        uploadedUrl = uploaded.secure_url as string;
+        const uploaded = await this.cloudinaryService.uploadFile(
+          avatar,
+          this.folderName,
+        );
+        uploadedUrl = uploaded.public_id as string;
       }
 
       const updated = this.userRepository.merge(existingUser, {
         ...updateUserDto,
         avatar: uploadedUrl || existingUser.avatar,
       });
+
+      if (uploadedUrl && oldImageId) {
+        await this.cloudinaryService.deleteFile(oldImageId);
+      }
 
       return await this.userRepository.save(updated);
     } catch (error) {
@@ -109,7 +148,7 @@ export class UserService {
         id: user.userId,
       });
       if (!existingUser) {
-        this.logger.warn(`User not found`);
+        this.logger.warn('User not found');
         throw new NotFoundException('User not found');
       }
 
@@ -150,13 +189,17 @@ export class UserService {
         id: user.userId,
       });
       if (!existingUser) {
-        this.logger.warn(`User not found`);
+        this.logger.warn('User not found');
         throw new NotFoundException('User not found');
       }
 
       await this.userRepository.remove(existingUser);
 
-      return { message: `User with ID #${user.userId} removed` };
+      if (existingUser.avatar) {
+        await this.cloudinaryService.deleteFile(existingUser.avatar);
+      }
+
+      return { message: 'User removed' };
     } catch (error) {
       this.logger.error('Error during delete user', error);
 

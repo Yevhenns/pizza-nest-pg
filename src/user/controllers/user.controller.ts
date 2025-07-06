@@ -30,6 +30,19 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns user',
+    type: ToUserDto,
+  })
+  findUser(@CurrentUser() user: CustomJwtPayload) {
+    return this.userService.findUser(user);
+  }
+
   @Get('orders')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

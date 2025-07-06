@@ -17,6 +17,7 @@ export class ProductsService {
   ) {}
 
   private readonly logger = new Logger(ProductsService.name);
+  private CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL;
 
   async findAll(categoryId?: number) {
     const where = categoryId ? { category: { id: categoryId } } : undefined;

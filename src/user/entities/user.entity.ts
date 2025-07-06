@@ -31,8 +31,7 @@ export class User {
   @Column({
     type: 'varchar',
     length: 255,
-    default:
-      'https://res.cloudinary.com/dyka4vajb/image/upload/f_auto,q_auto/v1/hatamagnata/other/qnzdjcor4opcy0kpkb4o',
+    nullable: true,
   })
   avatar: string;
 
