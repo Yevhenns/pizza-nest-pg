@@ -15,6 +15,7 @@ import { User } from '../entities/user.entity';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
 import { CloudinaryService } from '~/cloudinary/services/cloudinary.service';
+import { ToUserDto } from '../dto/to-user.dto';
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,34 @@ export class UserService {
 
   private readonly logger = new Logger(UserService.name);
   private readonly folderName = 'users';
+
+  async findUser(user: CustomJwtPayload): Promise<ToUserDto> {
+    try {
+      const existingUser = await this.userRepository.findOne({
+        where: { id: user.userId },
+      });
+
+      if (!existingUser) {
+        this.logger.error('User not found');
+        throw new NotFoundException('User not found');
+      }
+
+      const userInfo: ToUserDto = {
+        name: existingUser.name,
+        avatar: existingUser.avatar,
+        email: existingUser.email,
+        phone: existingUser.phone,
+      };
+
+      return userInfo;
+    } catch (error) {
+      this.logger.error('Get orders failed', error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Get orders failed');
+    }
+  }
 
   async findAllOrders(user: CustomJwtPayload): Promise<UserOrder[]> {
     try {
