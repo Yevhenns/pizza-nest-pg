@@ -11,8 +11,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Get products list or filter by category' })
   @ApiResponse({
     status: 200,
-    description:
-      'Returns products list. Add https://res.cloudinary.com/dyka4vajb/image/upload/ to image',
+    description: 'Returns products list.',
     type: [CreateProductDto],
   })
   @ApiQuery({ name: 'categoryId', required: false, type: Number })
@@ -24,8 +23,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Get promotions products list' })
   @ApiResponse({
     status: 200,
-    description:
-      'Returns promotions products list. Add https://res.cloudinary.com/dyka4vajb/image/upload/ to image',
+    description: 'Returns promotions products list.',
     type: [CreateProductDto],
   })
   findPromotions() {
@@ -36,8 +34,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Get product by ID' })
   @ApiResponse({
     status: 200,
-    description:
-      'Returns product by ID. Add https://res.cloudinary.com/dyka4vajb/image/upload/ to image',
+    description: 'Returns product by ID.',
     type: CreateProductDto,
   })
   findOne(@Param('id') id: string) {
