@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { OrderMailController } from './controllers/order-mail.controller';
-import { OrderMailService } from './services/order-mail.service';
+import { OrderController } from './controllers/order.controller';
+import { OrderService } from './services/order.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserOrder } from './entities/order-mail.entity';
+import { UserOrder } from './entities/order.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { User } from '~/user/entities/user.entity';
 
@@ -13,7 +13,7 @@ import { User } from '~/user/entities/user.entity';
       secret: process.env.JWT_SECRET,
     }),
   ],
-  controllers: [OrderMailController],
-  providers: [OrderMailService],
+  controllers: [OrderController],
+  providers: [OrderService],
 })
-export class OrderMailModule {}
+export class OrderModule {}

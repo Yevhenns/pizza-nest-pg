@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserOrder } from '~/order-mail/entities/order-mail.entity';
+import { UserOrder } from '~/order/entities/order.entity';
 
 @Entity('user')
 export class User {

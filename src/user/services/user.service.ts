@@ -10,7 +10,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserOrder } from '~/order-mail/entities/order-mail.entity';
+import { UserOrder } from '~/order/entities/order.entity';
 import { User } from '../entities/user.entity';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import * as bcrypt from 'bcrypt';

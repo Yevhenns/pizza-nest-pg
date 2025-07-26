@@ -1,12 +1,12 @@
 import { Controller, Post, Body, Req } from '@nestjs/common';
-import { OrderMailService } from '../services/order-mail.service';
-import { CreateOrderMailDto } from '../dto/create-order-mail.dto';
+import { OrderService } from '../services/order.service';
+import { CreateOrderDto } from '../dto/create-order.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { SuccessDto } from '~/dto/success.dto';
+import { SuccessDto } from '~/common/dto/success.dto';
 
-@Controller('order-mail')
-export class OrderMailController {
-  constructor(private readonly orderMailService: OrderMailService) {}
+@Controller('order')
+export class OrderController {
+  constructor(private readonly orderService: OrderService) {}
 
   @Post()
   @ApiBearerAuth()
@@ -20,7 +20,7 @@ export class OrderMailController {
     description: 'Returns object { success: true }',
     type: SuccessDto,
   })
-  create(@Req() req: Request, @Body() createOrderMailDto: CreateOrderMailDto) {
-    return this.orderMailService.create(req, createOrderMailDto);
+  create(@Req() req: Request, @Body() createOrderDto: CreateOrderDto) {
+    return this.orderService.create(req, createOrderDto);
   }
 }

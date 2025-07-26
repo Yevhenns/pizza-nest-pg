@@ -4,20 +4,20 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateOrderMailDto } from '../dto/create-order-mail.dto';
+import { CreateOrderDto } from '../dto/create-order.dto';
 import * as handlebars from 'handlebars';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import * as nodemailer from 'nodemailer';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserOrder } from '../entities/order-mail.entity';
+import { UserOrder } from '../entities/order.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '~/user/entities/user.entity';
 import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
 
 @Injectable()
-export class OrderMailService {
+export class OrderService {
   constructor(
     @InjectRepository(UserOrder)
     private readonly userOrdersRepository: Repository<UserOrder>,
@@ -26,7 +26,7 @@ export class OrderMailService {
     private jwtService: JwtService,
   ) {}
 
-  private readonly logger = new Logger(OrderMailService.name);
+  private readonly logger = new Logger(OrderService.name);
 
   private readonly templatePath = join(__dirname, '../views/index.hbs');
 
@@ -36,7 +36,7 @@ export class OrderMailService {
 
   async create(
     req: Request,
-    createOrderMailDto: CreateOrderMailDto,
+    createOrderMailDto: CreateOrderDto,
   ): Promise<{
     success: boolean;
   }> {

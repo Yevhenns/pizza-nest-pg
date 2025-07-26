@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserOrder } from '~/order-mail/entities/order-mail.entity';
+import { UserOrder } from '~/order/entities/order.entity';
 import { User } from './entities/user.entity';
 import { CloudinaryService } from '~/cloudinary/services/cloudinary.service';
 

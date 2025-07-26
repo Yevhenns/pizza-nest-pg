@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { SupplementsService } from '../services/supplements.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateSupplementDto } from '~/admin/supplements/dto/create-supplement.dto';
@@ -25,7 +25,7 @@ export class SupplementsController {
     description: 'Returns supplement by ID',
     type: CreateSupplementDto,
   })
-  findOne(@Param('id') id: string) {
-    return this.supplementsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.supplementsService.findOne(id);
   }
 }

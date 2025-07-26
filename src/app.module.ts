@@ -5,15 +5,16 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
-import { ormConfig } from './config/orm-config';
+import { ormConfig } from './common/config/orm-config';
 import { CategoriesModule } from './catalog/categories/categories.module';
 
 import { ProductsModule } from './catalog/products/products.module';
 import { SupplementsModule } from './catalog/supplements/supplements.module';
 import { AdminModule } from './admin/admin.module';
-import { OrderMailModule } from './order-mail/order-mail.module';
+import { OrderModule } from './order/order.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UserModule } from './user/user.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -28,9 +29,10 @@ import { UserModule } from './user/user.module';
     ProductsModule,
     SupplementsModule,
     AdminModule,
-    OrderMailModule,
+    OrderModule,
     CloudinaryModule,
     UserModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
