@@ -19,7 +19,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
-import { CreateOrderMailDto } from '~/order-mail/dto/create-order-mail.dto';
+import { CreateOrderDto } from '~/order/dto/create-order.dto';
 import { CurrentUser } from '../decorators/user.decorator';
 import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
 import { ToUserDto } from '../dto/to-user.dto';
@@ -51,7 +51,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Returns user orders list',
-    type: [CreateOrderMailDto],
+    type: [CreateOrderDto],
   })
   findAllOrders(@CurrentUser() user: CustomJwtPayload) {
     return this.userService.findAllOrders(user);
@@ -64,7 +64,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Returns user order by ID',
-    type: CreateOrderMailDto,
+    type: CreateOrderDto,
   })
   findOneOrder(
     @CurrentUser() user: CustomJwtPayload,

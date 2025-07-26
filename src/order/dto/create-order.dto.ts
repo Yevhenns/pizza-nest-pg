@@ -33,7 +33,7 @@ class OrderItemDto {
   optionsTitles?: string[];
 }
 
-export class CreateOrderMailDto {
+export class CreateOrderDto {
   @ApiProperty({ example: 'Alex', description: 'Customer name' })
   @IsString()
   @IsNotEmpty()
