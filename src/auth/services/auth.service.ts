@@ -19,7 +19,7 @@ import { UserRole } from '~/roles/interfaces/role.interface';
 import { CreateUserDto } from '~/user/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { EmailService } from '~/email/email.service';
+import { EmailService } from '~/email/services/email.service';
 import { LoginDto } from '../dto/login.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { CustomJwtPayload } from '../interfaces/auth.interface';
