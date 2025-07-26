@@ -14,6 +14,7 @@ import { AdminModule } from './admin/admin.module';
 import { OrderMailModule } from './order-mail/order-mail.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UserModule } from './user/user.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UserModule } from './user/user.module';
     OrderMailModule,
     CloudinaryModule,
     UserModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

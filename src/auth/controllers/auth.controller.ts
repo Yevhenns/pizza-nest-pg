@@ -1,25 +1,15 @@
 import { Controller, Post, Body, Param, Get } from '@nestjs/common';
-import { RegisterService } from '../services/register/register.service';
-import { LoginService } from '../services/login/login.service';
-import { VerifyService } from '../services/verify/verify.service';
-import { VerificationTokenService } from '../services/verification-token/verification-token.service';
 import { LoginDto } from '../dto/login.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GoogleAuthDto } from '../dto/google-auth.dto';
-import { GoogleAuthService } from '../services/google-auth/google-auth.service';
 import { CreateUserDto } from '~/user/dto/create-user.dto';
 import { SuccessDto } from '~/dto/success.dto';
+import { AuthService } from '../services/auth.service';
 
 @Controller()
 export class AuthController {
-  constructor(
-    private readonly googleAuthService: GoogleAuthService,
-    private readonly registerService: RegisterService,
-    private readonly loginService: LoginService,
-    private readonly verifyService: VerifyService,
-    private readonly verificationTokenService: VerificationTokenService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('google-auth')
   @ApiOperation({ summary: 'Login user by google' })
@@ -29,7 +19,7 @@ export class AuthController {
     type: String,
   })
   googleAuth(@Body() googleAuthDto: GoogleAuthDto) {
-    return this.googleAuthService.googleAuth(googleAuthDto);
+    return this.authService.googleAuth(googleAuthDto);
   }
 
   @Post('register')
@@ -41,7 +31,7 @@ export class AuthController {
     type: SuccessDto,
   })
   create(@Body() createUserDto: CreateUserDto) {
-    return this.registerService.register(createUserDto);
+    return this.authService.register(createUserDto);
   }
 
   @Post('login')
@@ -52,7 +42,7 @@ export class AuthController {
     type: String,
   })
   login(@Body() loginDto: LoginDto) {
-    return this.loginService.login(loginDto);
+    return this.authService.login(loginDto);
   }
 
   @Get('verify/:token')
@@ -63,7 +53,7 @@ export class AuthController {
     type: SuccessDto,
   })
   verifyEmail(@Param('token') token: string) {
-    return this.verifyService.verifyEmail(token);
+    return this.authService.verifyEmail(token);
   }
 
   @Post('resend-verification')
@@ -77,8 +67,6 @@ export class AuthController {
   resendEmailVerification(
     @Body() resendVerificationDto: ResendVerificationDto,
   ) {
-    return this.verificationTokenService.resendEmailVerification(
-      resendVerificationDto,
-    );
+    return this.authService.resendEmailVerification(resendVerificationDto);
   }
 }
