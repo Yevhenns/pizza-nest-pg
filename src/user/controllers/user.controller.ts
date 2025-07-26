@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../services/user.service';
@@ -65,8 +66,11 @@ export class UserController {
     description: 'Returns user order by ID',
     type: CreateOrderMailDto,
   })
-  findOneOrder(@CurrentUser() user: CustomJwtPayload, @Param('id') id: string) {
-    return this.userService.findOneOrder(user, +id);
+  findOneOrder(
+    @CurrentUser() user: CustomJwtPayload,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.userService.findOneOrder(user, id);
   }
 
   @Patch()

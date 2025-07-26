@@ -8,6 +8,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -57,11 +58,11 @@ export class ProductsController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    return this.productsService.update(+id, updateProductDto, image);
+    return this.productsService.update(id, updateProductDto, image);
   }
 
   @Delete(':id')
@@ -73,7 +74,7 @@ export class ProductsController {
     description: 'Returns object { message: "Product with ID # removed" }',
     type: SuccessDto,
   })
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.remove(id);
   }
 }

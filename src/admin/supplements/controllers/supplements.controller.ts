@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { SupplementsService } from '../services/supplements.service';
 import { CreateSupplementDto } from '../dto/create-supplement.dto';
@@ -42,10 +43,10 @@ export class SupplementsController {
     type: CreateSupplementDto,
   })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateSupplementDto: UpdateSupplementDto,
   ) {
-    return this.supplementsService.update(+id, updateSupplementDto);
+    return this.supplementsService.update(id, updateSupplementDto);
   }
 
   @Delete(':id')
@@ -57,7 +58,7 @@ export class SupplementsController {
     description: 'Returns object { message: "Supplement with ID # removed" }',
     type: SuccessDto,
   })
-  remove(@Param('id') id: string) {
-    return this.supplementsService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.supplementsService.remove(id);
   }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
@@ -43,10 +44,10 @@ export class CategoriesController {
     type: Category,
   })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+    return this.categoriesService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')
@@ -58,7 +59,7 @@ export class CategoriesController {
     description: 'Returns object { message: "Category with ID # removed" }',
     type: SuccessDto,
   })
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.remove(id);
   }
 }

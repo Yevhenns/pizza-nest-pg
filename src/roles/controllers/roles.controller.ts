@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { RolesService } from '../services/roles.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RoleWithoutUsersDto } from '../entities/role.entity';
@@ -26,7 +26,7 @@ export class RolesController {
     description: 'Returns role by ID',
     type: RoleWithoutUsersDto,
   })
-  findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.rolesService.findOne(id);
   }
 }

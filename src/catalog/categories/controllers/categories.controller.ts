@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { CategoriesService } from '../services/categories.service';
 import { Category } from '../entities/category.entity';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -26,7 +26,7 @@ export class CategoriesController {
     description: 'Returns category by ID',
     type: Category,
   })
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.findOne(id);
   }
 }
