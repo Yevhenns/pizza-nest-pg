@@ -20,12 +20,12 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
 import { CreateOrderDto } from '~/order/dto/create-order.dto';
-import { CurrentUser } from '../decorators/user.decorator';
-import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
+import { CurrentUser } from '../../common/decorators/user.decorator';
 import { ToUserDto } from '../dto/to-user.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import { SuccessDto } from '~/common/dto/success.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CustomJwtPayload } from '~/common/interfaces/auth.interface';
 
 @Controller('user')
 export class UserController {
