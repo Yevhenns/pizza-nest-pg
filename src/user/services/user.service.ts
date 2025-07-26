@@ -7,7 +7,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserOrder } from '~/order/entities/order.entity';
@@ -16,6 +15,7 @@ import { ChangePasswordDto } from '../dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
 import { CloudinaryService } from '~/cloudinary/services/cloudinary.service';
 import { ToUserDto } from '../dto/to-user.dto';
+import { CustomJwtPayload } from '~/common/interfaces/auth.interface';
 
 @Injectable()
 export class UserService {

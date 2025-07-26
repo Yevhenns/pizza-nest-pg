@@ -1,6 +1,6 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { UserRole } from '../interfaces/role.interface';
+import { UserRole } from '../../common/interfaces/role.interface';
 import { User } from '~/user/entities/user.entity';
 
 @Entity('role')

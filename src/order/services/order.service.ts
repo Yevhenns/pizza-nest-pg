@@ -14,7 +14,7 @@ import { UserOrder } from '../entities/order.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '~/user/entities/user.entity';
-import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
+import { CustomJwtPayload } from '~/common/interfaces/auth.interface';
 
 @Injectable()
 export class OrderService {

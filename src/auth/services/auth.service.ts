@@ -15,14 +15,14 @@ import { Role } from '~/roles/entities/role.entity';
 import { User } from '~/user/entities/user.entity';
 import { GoogleAuthDto } from '../dto/google-auth.dto';
 import { OAuth2Client } from 'google-auth-library';
-import { UserRole } from '~/roles/interfaces/role.interface';
+import { UserRole } from '~/common/interfaces/role.interface';
 import { CreateUserDto } from '~/user/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { EmailService } from '~/email/services/email.service';
 import { LoginDto } from '../dto/login.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
-import { CustomJwtPayload } from '../interfaces/auth.interface';
+import { CustomJwtPayload } from '~/common/interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
