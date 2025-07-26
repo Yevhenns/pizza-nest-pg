@@ -2,7 +2,7 @@ import { Controller, Post, Body, Req } from '@nestjs/common';
 import { OrderService } from '../services/order.service';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { SuccessDto } from '~/dto/success.dto';
+import { SuccessDto } from '~/common/dto/success.dto';
 
 @Controller('order')
 export class OrderController {

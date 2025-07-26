@@ -4,7 +4,7 @@ import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GoogleAuthDto } from '../dto/google-auth.dto';
 import { CreateUserDto } from '~/user/dto/create-user.dto';
-import { SuccessDto } from '~/dto/success.dto';
+import { SuccessDto } from '~/common/dto/success.dto';
 import { AuthService } from '../services/auth.service';
 
 @Controller()

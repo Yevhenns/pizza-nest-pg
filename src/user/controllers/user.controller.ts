@@ -24,7 +24,7 @@ import { CurrentUser } from '../decorators/user.decorator';
 import { CustomJwtPayload } from '~/auth/interfaces/auth.interface';
 import { ToUserDto } from '../dto/to-user.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
-import { SuccessDto } from '~/dto/success.dto';
+import { SuccessDto } from '~/common/dto/success.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')

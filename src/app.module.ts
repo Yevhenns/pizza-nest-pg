@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
-import { ormConfig } from './config/orm-config';
+import { ormConfig } from './common/config/orm-config';
 import { CategoriesModule } from './catalog/categories/categories.module';
 
 import { ProductsModule } from './catalog/products/products.module';

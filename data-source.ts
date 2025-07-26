@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { ormConfig } from './src/config/orm-config';
+import { ormConfig } from './src/common/config/orm-config';
 import { SeederOptions } from 'typeorm-extension';
 
 export const dataSource = new DataSource({

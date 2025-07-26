@@ -14,7 +14,7 @@ import { UpdateSupplementDto } from '../dto/update-supplement.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
 import { AdminGuard } from '~/auth/guards/admin.guard';
-import { SuccessDto } from '~/dto/success.dto';
+import { SuccessDto } from '~/common/dto/success.dto';
 
 @Controller('admin/supplements')
 export class SupplementsController {

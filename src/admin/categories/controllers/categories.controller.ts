@@ -15,7 +15,7 @@ import { CategoriesService } from '../services/categories.service';
 import { AdminGuard } from '~/auth/guards/admin.guard';
 import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
 import { Category } from '~/catalog/categories/entities/category.entity';
-import { SuccessDto } from '~/dto/success.dto';
+import { SuccessDto } from '~/common/dto/success.dto';
 
 @Controller('admin/categories')
 export class CategoriesController {
