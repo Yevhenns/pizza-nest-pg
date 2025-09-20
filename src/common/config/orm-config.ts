@@ -9,5 +9,5 @@ export const ormConfig: DataSourceOptions = {
   ssl: {
     rejectUnauthorized: false,
   },
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
 };
